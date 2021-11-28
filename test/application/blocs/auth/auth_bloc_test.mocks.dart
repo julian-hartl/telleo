@@ -6,9 +6,10 @@ import 'dart:async' as _i4;
 
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:telleo/domain/core/repositories/user_repository.dart' as _i3;
-import 'package:telleo/domain/entities/user_entity.dart' as _i5;
-import 'package:telleo/domain/states/user_state.dart' as _i6;
+import 'package:telleo/domain/entities/user_entity.dart' as _i6;
+import 'package:telleo/domain/states/user_state.dart' as _i7;
+import 'package:telleo/domain/user/user_failures.dart' as _i5;
+import 'package:telleo/domain/user/user_repository.dart' as _i3;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -19,7 +20,7 @@ import 'package:telleo/domain/states/user_state.dart' as _i6;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeOption_0<A> extends _i1.Fake implements _i2.Option<A> {}
+class _FakeEither_0<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
 
 /// A class which mocks [UserRepository].
 ///
@@ -30,11 +31,14 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
   }
 
   @override
-  _i4.Future<_i2.Option<_i5.UserEntity>> getCurrentUser() =>
-      (super.noSuchMethod(Invocation.method(#getCurrentUser, []),
-              returnValue: Future<_i2.Option<_i5.UserEntity>>.value(
-                  _FakeOption_0<_i5.UserEntity>()))
-          as _i4.Future<_i2.Option<_i5.UserEntity>>);
+  _i4.Future<
+      _i2.Either<_i5.UserFailure,
+          _i2.Option<_i6.UserEntity>>> getCurrentUser() => (super.noSuchMethod(
+      Invocation.method(#getCurrentUser, []),
+      returnValue:
+          Future<_i2.Either<_i5.UserFailure, _i2.Option<_i6.UserEntity>>>.value(
+              _FakeEither_0<_i5.UserFailure, _i2.Option<_i6.UserEntity>>())) as _i4
+      .Future<_i2.Either<_i5.UserFailure, _i2.Option<_i6.UserEntity>>>);
   @override
   String toString() => super.toString();
 }
@@ -42,7 +46,7 @@ class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
 /// A class which mocks [UserState].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUserState extends _i1.Mock implements _i6.UserState {
+class MockUserState extends _i1.Mock implements _i7.UserState {
   MockUserState() {
     _i1.throwOnMissingStub(this);
   }
@@ -50,7 +54,7 @@ class MockUserState extends _i1.Mock implements _i6.UserState {
   @override
   String toString() => super.toString();
   @override
-  void update(_i5.UserEntity? t) =>
-      super.noSuchMethod(Invocation.method(#update, [t]),
+  void update(_i6.UserEntity? value) =>
+      super.noSuchMethod(Invocation.method(#update, [value]),
           returnValueForMissingStub: null);
 }

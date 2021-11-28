@@ -5,7 +5,7 @@ part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
 @freezed
-abstract class UserModel extends UserEntity with _$UserModel {
+class UserModel with _$UserModel implements UserEntity {
   const factory UserModel({
     required String name,
     required String uid,
@@ -13,4 +13,14 @@ abstract class UserModel extends UserEntity with _$UserModel {
   }) = _UserModel;
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
+
+  const UserModel._();
+
+  @JsonKey(ignore: true)
+  @override
+  List<Object?> get props => [name, uid, email];
+
+  @JsonKey(ignore: true)
+  @override
+  bool? get stringify => true;
 }

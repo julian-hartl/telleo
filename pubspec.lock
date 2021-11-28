@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "30.0.0"
+  advance_notification:
+    dependency: "direct main"
+    description:
+      name: advance_notification
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.5"
   analyzer:
     dependency: transitive
     description:
@@ -725,4 +732,4 @@ packages:
     version: "3.1.0"
 sdks:
   dart: ">=2.14.0 <3.0.0"
-  flutter: ">=1.16.0"
+  flutter: ">=1.17.0"

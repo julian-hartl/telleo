@@ -5,4 +5,5 @@ class AuthState with _$AuthState {
   const factory AuthState.initial() = _Initial;
   const factory AuthState.unauthenticated() = Unauthenticated;
   const factory AuthState.authenticated() = Authenticated;
+  const factory AuthState.error({required String message}) = AuthError;
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:telleo/application/blocs/auth/auth_form/auth_form_bloc.dart';
+import '../../../../application/blocs/auth/auth_form/auth_form_bloc.dart';
 
-import 'package:telleo/domain/auth/auth_repository.dart';
-import 'package:telleo/presentation/pages/auth/auth_page/auth_form.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../../../domain/auth/auth_repository.dart';
+import 'auth_form.dart';
+import '../../../../utils/dependencies.dart';
 
 import '../../../routing/routing.dart';
 

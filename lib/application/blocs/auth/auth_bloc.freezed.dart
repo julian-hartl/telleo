@@ -307,6 +307,12 @@ class _$AuthStateTearOff {
   Authenticated authenticated() {
     return const Authenticated();
   }
+
+  AuthError error({required String message}) {
+    return AuthError(
+      message: message,
+    );
+  }
 }
 
 /// @nodoc
@@ -319,6 +325,7 @@ mixin _$AuthState {
     required TResult Function() initial,
     required TResult Function() unauthenticated,
     required TResult Function() authenticated,
+    required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -326,6 +333,7 @@ mixin _$AuthState {
     TResult Function()? initial,
     TResult Function()? unauthenticated,
     TResult Function()? authenticated,
+    TResult Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -333,6 +341,7 @@ mixin _$AuthState {
     TResult Function()? initial,
     TResult Function()? unauthenticated,
     TResult Function()? authenticated,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -341,6 +350,7 @@ mixin _$AuthState {
     required TResult Function(_Initial value) initial,
     required TResult Function(Unauthenticated value) unauthenticated,
     required TResult Function(Authenticated value) authenticated,
+    required TResult Function(AuthError value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -348,6 +358,7 @@ mixin _$AuthState {
     TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -355,6 +366,7 @@ mixin _$AuthState {
     TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -416,6 +428,7 @@ class _$_Initial implements _Initial {
     required TResult Function() initial,
     required TResult Function() unauthenticated,
     required TResult Function() authenticated,
+    required TResult Function(String message) error,
   }) {
     return initial();
   }
@@ -426,6 +439,7 @@ class _$_Initial implements _Initial {
     TResult Function()? initial,
     TResult Function()? unauthenticated,
     TResult Function()? authenticated,
+    TResult Function(String message)? error,
   }) {
     return initial?.call();
   }
@@ -436,6 +450,7 @@ class _$_Initial implements _Initial {
     TResult Function()? initial,
     TResult Function()? unauthenticated,
     TResult Function()? authenticated,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -450,6 +465,7 @@ class _$_Initial implements _Initial {
     required TResult Function(_Initial value) initial,
     required TResult Function(Unauthenticated value) unauthenticated,
     required TResult Function(Authenticated value) authenticated,
+    required TResult Function(AuthError value) error,
   }) {
     return initial(this);
   }
@@ -460,6 +476,7 @@ class _$_Initial implements _Initial {
     TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
   }) {
     return initial?.call(this);
   }
@@ -470,6 +487,7 @@ class _$_Initial implements _Initial {
     TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -526,6 +544,7 @@ class _$Unauthenticated implements Unauthenticated {
     required TResult Function() initial,
     required TResult Function() unauthenticated,
     required TResult Function() authenticated,
+    required TResult Function(String message) error,
   }) {
     return unauthenticated();
   }
@@ -536,6 +555,7 @@ class _$Unauthenticated implements Unauthenticated {
     TResult Function()? initial,
     TResult Function()? unauthenticated,
     TResult Function()? authenticated,
+    TResult Function(String message)? error,
   }) {
     return unauthenticated?.call();
   }
@@ -546,6 +566,7 @@ class _$Unauthenticated implements Unauthenticated {
     TResult Function()? initial,
     TResult Function()? unauthenticated,
     TResult Function()? authenticated,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -560,6 +581,7 @@ class _$Unauthenticated implements Unauthenticated {
     required TResult Function(_Initial value) initial,
     required TResult Function(Unauthenticated value) unauthenticated,
     required TResult Function(Authenticated value) authenticated,
+    required TResult Function(AuthError value) error,
   }) {
     return unauthenticated(this);
   }
@@ -570,6 +592,7 @@ class _$Unauthenticated implements Unauthenticated {
     TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
   }) {
     return unauthenticated?.call(this);
   }
@@ -580,6 +603,7 @@ class _$Unauthenticated implements Unauthenticated {
     TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
     required TResult orElse(),
   }) {
     if (unauthenticated != null) {
@@ -636,6 +660,7 @@ class _$Authenticated implements Authenticated {
     required TResult Function() initial,
     required TResult Function() unauthenticated,
     required TResult Function() authenticated,
+    required TResult Function(String message) error,
   }) {
     return authenticated();
   }
@@ -646,6 +671,7 @@ class _$Authenticated implements Authenticated {
     TResult Function()? initial,
     TResult Function()? unauthenticated,
     TResult Function()? authenticated,
+    TResult Function(String message)? error,
   }) {
     return authenticated?.call();
   }
@@ -656,6 +682,7 @@ class _$Authenticated implements Authenticated {
     TResult Function()? initial,
     TResult Function()? unauthenticated,
     TResult Function()? authenticated,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -670,6 +697,7 @@ class _$Authenticated implements Authenticated {
     required TResult Function(_Initial value) initial,
     required TResult Function(Unauthenticated value) unauthenticated,
     required TResult Function(Authenticated value) authenticated,
+    required TResult Function(AuthError value) error,
   }) {
     return authenticated(this);
   }
@@ -680,6 +708,7 @@ class _$Authenticated implements Authenticated {
     TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
   }) {
     return authenticated?.call(this);
   }
@@ -690,6 +719,7 @@ class _$Authenticated implements Authenticated {
     TResult Function(_Initial value)? initial,
     TResult Function(Unauthenticated value)? unauthenticated,
     TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
     required TResult orElse(),
   }) {
     if (authenticated != null) {
@@ -701,4 +731,146 @@ class _$Authenticated implements Authenticated {
 
 abstract class Authenticated implements AuthState {
   const factory Authenticated() = _$Authenticated;
+}
+
+/// @nodoc
+abstract class $AuthErrorCopyWith<$Res> {
+  factory $AuthErrorCopyWith(AuthError value, $Res Function(AuthError) then) =
+      _$AuthErrorCopyWithImpl<$Res>;
+  $Res call({String message});
+}
+
+/// @nodoc
+class _$AuthErrorCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
+    implements $AuthErrorCopyWith<$Res> {
+  _$AuthErrorCopyWithImpl(AuthError _value, $Res Function(AuthError) _then)
+      : super(_value, (v) => _then(v as AuthError));
+
+  @override
+  AuthError get _value => super._value as AuthError;
+
+  @override
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(AuthError(
+      message: message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AuthError implements AuthError {
+  const _$AuthError({required this.message});
+
+  @override
+  final String message;
+
+  @override
+  String toString() {
+    return 'AuthState.error(message: $message)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AuthError &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+
+  @JsonKey(ignore: true)
+  @override
+  $AuthErrorCopyWith<AuthError> get copyWith =>
+      _$AuthErrorCopyWithImpl<AuthError>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() unauthenticated,
+    required TResult Function() authenticated,
+    required TResult Function(String message) error,
+  }) {
+    return error(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? unauthenticated,
+    TResult Function()? authenticated,
+    TResult Function(String message)? error,
+  }) {
+    return error?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? unauthenticated,
+    TResult Function()? authenticated,
+    TResult Function(String message)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(Unauthenticated value) unauthenticated,
+    required TResult Function(Authenticated value) authenticated,
+    required TResult Function(AuthError value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(Unauthenticated value)? unauthenticated,
+    TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(Unauthenticated value)? unauthenticated,
+    TResult Function(Authenticated value)? authenticated,
+    TResult Function(AuthError value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AuthError implements AuthState {
+  const factory AuthError({required String message}) = _$AuthError;
+
+  String get message;
+  @JsonKey(ignore: true)
+  $AuthErrorCopyWith<AuthError> get copyWith =>
+      throw _privateConstructorUsedError;
 }

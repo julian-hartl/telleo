@@ -131,9 +131,10 @@ class __$UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_UserModel implements _UserModel {
+class _$_UserModel extends _UserModel {
   const _$_UserModel(
-      {required this.name, required this.uid, required this.email});
+      {required this.name, required this.uid, required this.email})
+      : super._();
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
@@ -144,24 +145,6 @@ class _$_UserModel implements _UserModel {
   final String uid;
   @override
   final String email;
-
-  @override
-  String toString() {
-    return 'UserModel(name: $name, uid: $uid, email: $email)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _UserModel &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.uid, uid) || other.uid == uid) &&
-            (identical(other.email, email) || other.email == email));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, name, uid, email);
 
   @JsonKey(ignore: true)
   @override
@@ -174,11 +157,12 @@ class _$_UserModel implements _UserModel {
   }
 }
 
-abstract class _UserModel implements UserModel {
+abstract class _UserModel extends UserModel {
   const factory _UserModel(
       {required String name,
       required String uid,
       required String email}) = _$_UserModel;
+  const _UserModel._() : super._();
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;

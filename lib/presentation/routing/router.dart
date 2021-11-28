@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:telleo/presentation/pages/auth/auth_page/auth_page.dart';
-import 'package:telleo/presentation/pages/auth/welcome_page.dart';
-import 'package:telleo/presentation/pages/splash_page.dart';
-import 'package:telleo/presentation/pages/telleo/home/chats_page.dart';
+import 'package:telleo/presentation/pages/home/chats_page.dart';
+import '../pages/auth/auth_page/auth_page.dart';
+import '../pages/auth/welcome_page.dart';
+import '../pages/splash_page.dart';
 
 part 'router.gr.dart';
 

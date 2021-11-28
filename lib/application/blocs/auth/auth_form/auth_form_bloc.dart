@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:telleo/domain/auth/auth_failure.dart';
-import 'package:telleo/domain/auth/auth_repository.dart';
-import 'package:telleo/domain/auth/value_objects.dart';
+import '../../../../domain/auth/auth_failure.dart';
+import '../../../../domain/auth/auth_repository.dart';
+import '../../../../domain/auth/value_objects.dart';
 
 part 'auth_form_bloc.freezed.dart';
 part 'auth_form_event.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:telleo/application/blocs/auth/auth_form/auth_form_bloc.dart';
+import '../../../../application/blocs/auth/auth_form/auth_form_bloc.dart';
 
-import 'package:telleo/domain/core/services/logger.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../../../domain/core/services/logger.dart';
+import '../../../../utils/dependencies.dart';
 
 import '../../../constants/colors.dart';
 import '../../../constants/decorations.dart';

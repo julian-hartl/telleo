@@ -1,9 +1,9 @@
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/auth/auth_failure.dart';
+import '../../domain/auth/auth_failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:telleo/domain/auth/auth_repository.dart';
-import 'package:telleo/domain/core/services/api_service.dart';
-import 'package:telleo/domain/states/user_state.dart';
+import '../../domain/auth/auth_repository.dart';
+import '../../domain/core/services/api_service.dart';
+import '../../domain/states/user_state.dart';
 
 @LazySingleton(as: AuthRepository)
 class TelleoAuthRepository implements AuthRepository {
