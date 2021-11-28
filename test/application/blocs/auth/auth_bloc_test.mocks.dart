@@ -6,8 +6,9 @@ import 'dart:async' as _i4;
 
 import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:telleo/domain/auth/auth_failure.dart' as _i5;
-import 'package:telleo/domain/auth/auth_repository.dart' as _i3;
+import 'package:telleo/domain/core/repositories/user_repository.dart' as _i3;
+import 'package:telleo/domain/entities/user_entity.dart' as _i5;
+import 'package:telleo/domain/states/user_state.dart' as _i6;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -18,40 +19,38 @@ import 'package:telleo/domain/auth/auth_repository.dart' as _i3;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeEither_0<L, R> extends _i1.Fake implements _i2.Either<L, R> {}
+class _FakeOption_0<A> extends _i1.Fake implements _i2.Option<A> {}
 
-/// A class which mocks [AuthRepository].
+/// A class which mocks [UserRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
-  MockAuthRepository() {
+class MockUserRepository extends _i1.Mock implements _i3.UserRepository {
+  MockUserRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>> signUpWithEmailAndPassword(
-          {String? email, String? password}) =>
-      (super.noSuchMethod(
-              Invocation.method(#signUpWithEmailAndPassword, [],
-                  {#email: email, #password: password}),
-              returnValue: Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>.value(
-                  _FakeEither_0<_i5.AuthFailure, _i2.Unit>()))
-          as _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>);
-  @override
-  _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>> signInWithEmailAndPassword(
-          {String? email, String? password}) =>
-      (super.noSuchMethod(
-              Invocation.method(#signInWithEmailAndPassword, [],
-                  {#email: email, #password: password}),
-              returnValue: Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>.value(
-                  _FakeEither_0<_i5.AuthFailure, _i2.Unit>()))
-          as _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>);
-  @override
-  _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>> signInWithGoogle() =>
-      (super.noSuchMethod(Invocation.method(#signInWithGoogle, []),
-              returnValue: Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>.value(
-                  _FakeEither_0<_i5.AuthFailure, _i2.Unit>()))
-          as _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>);
+  _i4.Future<_i2.Option<_i5.UserEntity>> getCurrentUser() =>
+      (super.noSuchMethod(Invocation.method(#getCurrentUser, []),
+              returnValue: Future<_i2.Option<_i5.UserEntity>>.value(
+                  _FakeOption_0<_i5.UserEntity>()))
+          as _i4.Future<_i2.Option<_i5.UserEntity>>);
   @override
   String toString() => super.toString();
+}
+
+/// A class which mocks [UserState].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUserState extends _i1.Mock implements _i6.UserState {
+  MockUserState() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  String toString() => super.toString();
+  @override
+  void update(_i5.UserEntity? t) =>
+      super.noSuchMethod(Invocation.method(#update, [t]),
+          returnValueForMissingStub: null);
 }

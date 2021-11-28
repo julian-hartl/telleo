@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:telleo/application/blocs/auth/auth_form/auth_form_bloc.dart';
 
-import 'package:telleo/application/blocs/auth/auth_bloc.dart';
 import 'package:telleo/domain/auth/auth_repository.dart';
 import 'package:telleo/presentation/pages/auth/auth_page/auth_form.dart';
 import 'package:telleo/utils/dependencies.dart';
@@ -21,7 +21,7 @@ class AuthPage extends StatelessWidget {
             icon: const Icon(Icons.arrow_back_ios)),
       ),
       body: BlocProvider(
-        create: (context) => AuthBloc(app.get<AuthRepository>()),
+        create: (context) => AuthFormBloc(app.get<AuthRepository>()),
         child: const AuthForm(),
       ),
     );

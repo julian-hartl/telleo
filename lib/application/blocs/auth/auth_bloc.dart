@@ -1,76 +1,32 @@
 import 'package:bloc/bloc.dart';
-import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../domain/auth/auth_repository.dart';
+import 'package:injectable/injectable.dart';
+import 'package:telleo/domain/core/repositories/user_repository.dart';
+import 'package:telleo/domain/states/user_state.dart';
 
-import '../../../domain/auth/auth_failure.dart';
-import '../../../domain/auth/value_objects.dart';
-
-part 'auth_bloc.freezed.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
+part 'auth_bloc.freezed.dart';
 
+@lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository authRepository;
+  final UserRepository userRepository;
+  final UserState userState;
 
-  Future<void> _performAuthAction(
-      Emitter<AuthState> emit,
-      Future<Either<AuthFailure, Unit>> Function(String email, String password)
-          authAction) async {
-    emit(state.copyWith(
-        isSubmitting: true,
-        authFailureOrSuccess: none(),
-        showErrorMessages: false));
-    final isEmailValid = state.emailAdress.isValid();
-    final isPasswordValid = state.password.isValid();
-    if (isEmailValid && isPasswordValid) {
-      final email = state.emailAdress.value.getOrElse(() => '');
-      final password = state.password.value.getOrElse(() => '');
-      final authResult = await authAction(email, password);
-
-      emit(state.copyWith(
-          isSubmitting: false,
-          authFailureOrSuccess: some(authResult),
-          showErrorMessages: authResult.isLeft()));
-    } else {
-      emit(state.copyWith(
-          isSubmitting: false,
-          showErrorMessages: true,
-          authFailureOrSuccess: none()));
-    }
-  }
-
-  AuthBloc(this.authRepository, [AuthState? initial])
-      : super(initial ?? AuthState.initial()) {
-    on<AuthPasswordChanged>((event, emit) {
-      final updated = state.copyWith(password: Password(event.password));
-      emit(updated);
+  AuthBloc(this.userRepository, this.userState) : super(const _Initial()) {
+    on<RequestUserCheck>((event, emit) async {
+      final userResult = await userRepository.getCurrentUser();
+      userResult.fold(() {
+        userState.update(null);
+        emit(const AuthState.unauthenticated());
+      }, (a) {
+        userState.update(a);
+        emit(const AuthState.authenticated());
+      });
     });
-    on<AuthEmailChanged>((event, emit) {
-      emit(state.copyWith(emailAdress: EmailAdress(event.email)));
-    });
-    on<AuthSignIn>((event, emit) async {
-      _performAuthAction(
-          emit,
-          (email, password) => authRepository.signInWithEmailAndPassword(
-              email: email, password: password));
-    });
-    on<AuthSignUp>((event, emit) async {
-      _performAuthAction(
-          emit,
-          (email, password) => authRepository.signUpWithEmailAndPassword(
-              email: email, password: password));
-    });
-    on<AuthSignInWithGoogle>((event, emit) async {
-      emit(state.copyWith(
-          isSubmitting: true,
-          authFailureOrSuccess: none(),
-          showErrorMessages: false));
-      final authResult = await authRepository.signInWithGoogle();
-      emit(state.copyWith(
-          isSubmitting: false,
-          authFailureOrSuccess: some(authResult),
-          showErrorMessages: authResult.isLeft()));
+    on<SignOut>((event, emit) {
+      userState.update(null);
+      emit(const AuthState.unauthenticated());
     });
   }
 }

@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
-import '../../domain/core/logger.dart';
+import '../../domain/core/services/logger.dart';
 
 @LazySingleton(as: ILogger)
 class TelleoLogger implements ILogger {

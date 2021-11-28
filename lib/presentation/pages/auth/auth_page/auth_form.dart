@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:telleo/application/blocs/auth/auth_bloc.dart';
-import 'package:telleo/domain/core/logger.dart';
+import 'package:telleo/application/blocs/auth/auth_form/auth_form_bloc.dart';
+
+import 'package:telleo/domain/core/services/logger.dart';
 import 'package:telleo/utils/dependencies.dart';
 
 import '../../../constants/colors.dart';
@@ -21,7 +22,7 @@ class AuthForm extends StatelessWidget {
       return SingleChildScrollView(
         child: Padding(
           padding: pagePadding,
-          child: BlocConsumer<AuthBloc, AuthState>(
+          child: BlocConsumer<AuthFormBloc, AuthFormState>(
             listener: (context, state) {
               state.authFailureOrSuccess.fold(
                 () {},
@@ -71,7 +72,7 @@ class AuthForm extends StatelessWidget {
                           children: [
                             TextFormField(
                               validator: (value) => context
-                                  .read<AuthBloc>()
+                                  .read<AuthFormBloc>()
                                   .state
                                   .emailAdress
                                   .value
@@ -80,7 +81,7 @@ class AuthForm extends StatelessWidget {
                                     (r) => null,
                                   ),
                               onChanged: (value) => context
-                                  .read<AuthBloc>()
+                                  .read<AuthFormBloc>()
                                   .add(AuthEmailChanged(value)),
                               decoration:
                                   outlineInputDecoration(theme, hint: 'Email'),
@@ -90,7 +91,7 @@ class AuthForm extends StatelessWidget {
                             const Gap(20),
                             TextFormField(
                               validator: (value) => context
-                                  .read<AuthBloc>()
+                                  .read<AuthFormBloc>()
                                   .state
                                   .password
                                   .value
@@ -102,7 +103,7 @@ class AuthForm extends StatelessWidget {
                                     (r) => null,
                                   ),
                               onChanged: (value) => context
-                                  .read<AuthBloc>()
+                                  .read<AuthFormBloc>()
                                   .add(AuthPasswordChanged(value)),
                               decoration: outlineInputDecoration(theme,
                                   hint: 'Password'),
@@ -125,7 +126,7 @@ class AuthForm extends StatelessWidget {
                         Buttons.Google,
                         onPressed: () {
                           context
-                              .read<AuthBloc>()
+                              .read<AuthFormBloc>()
                               .add(const AuthSignInWithGoogle());
                         },
                       ),
@@ -138,14 +139,14 @@ class AuthForm extends StatelessWidget {
                       TelleoTextButton(
                         text: 'Sign In',
                         onPressed: () {
-                          context.read<AuthBloc>().add(const AuthSignIn());
+                          context.read<AuthFormBloc>().add(const AuthSignIn());
                         },
                       ),
                       const Gap(10),
                       TelleoTextButton(
                         text: 'Sign up',
                         onPressed: () {
-                          context.read<AuthBloc>().add(const AuthSignUp());
+                          context.read<AuthFormBloc>().add(const AuthSignUp());
                         },
                         buttonTheme: TelloTextButtonTheme.reversed,
                       ),
