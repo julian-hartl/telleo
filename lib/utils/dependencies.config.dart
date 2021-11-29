@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart' as _i2;
 import 'package:logger/logger.dart' as _i9;
 
 import '../application/blocs/auth/auth_bloc.dart' as _i14;
-import '../application/blocs/home/chats/chats_bloc.dart' as _i17;
+import '../application/blocs/chats/chats_bloc.dart' as _i17;
 import '../data/core/telleo_logger.dart' as _i19;
 import '../data/repositories/telleo_auth_repository.dart' as _i16;
 import '../data/repositories/telleo_chats_repository.dart' as _i8;
@@ -18,12 +18,12 @@ import '../data/services/telleo_api_service.dart' as _i4;
 import '../data/states/chats_data_state.dart' as _i6;
 import '../data/states/user_state.dart' as _i13;
 import '../domain/auth/auth_repository.dart' as _i15;
+import '../domain/chats/chats_data_state.dart' as _i5;
 import '../domain/chats/chats_repository.dart' as _i7;
-import '../domain/core/services/api_service.dart' as _i3;
+import '../domain/core/services/api_service/api_service.dart' as _i3;
 import '../domain/core/services/logger.dart' as _i18;
-import '../domain/states/chats_data_state.dart' as _i5;
-import '../domain/states/user_state.dart' as _i12;
 import '../domain/user/user_repository.dart' as _i10;
+import '../domain/user/user_state.dart' as _i12;
 import 'modules.dart' as _i20; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars

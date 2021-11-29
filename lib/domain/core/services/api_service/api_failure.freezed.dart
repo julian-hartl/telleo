@@ -17,10 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$ApiFailureTearOff {
   const _$ApiFailureTearOff();
 
-  InvalidAccessTokenFailure invalidAccessToken() {
-    return const InvalidAccessTokenFailure();
-  }
-
   InternalServerError internalServerError({required String errorMessage}) {
     return InternalServerError(
       errorMessage: errorMessage,
@@ -33,44 +29,43 @@ const $ApiFailure = _$ApiFailureTearOff();
 
 /// @nodoc
 mixin _$ApiFailure {
+  String get errorMessage => throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() invalidAccessToken,
     required TResult Function(String errorMessage) internalServerError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? invalidAccessToken,
     TResult Function(String errorMessage)? internalServerError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? invalidAccessToken,
     TResult Function(String errorMessage)? internalServerError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(InvalidAccessTokenFailure value)
-        invalidAccessToken,
     required TResult Function(InternalServerError value) internalServerError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
     TResult Function(InternalServerError value)? internalServerError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
     TResult Function(InternalServerError value)? internalServerError,
     required TResult orElse(),
   }) =>
+      throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $ApiFailureCopyWith<ApiFailure> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -79,6 +74,7 @@ abstract class $ApiFailureCopyWith<$Res> {
   factory $ApiFailureCopyWith(
           ApiFailure value, $Res Function(ApiFailure) then) =
       _$ApiFailureCopyWithImpl<$Res>;
+  $Res call({String errorMessage});
 }
 
 /// @nodoc
@@ -88,121 +84,27 @@ class _$ApiFailureCopyWithImpl<$Res> implements $ApiFailureCopyWith<$Res> {
   final ApiFailure _value;
   // ignore: unused_field
   final $Res Function(ApiFailure) _then;
+
+  @override
+  $Res call({
+    Object? errorMessage = freezed,
+  }) {
+    return _then(_value.copyWith(
+      errorMessage: errorMessage == freezed
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
-abstract class $InvalidAccessTokenFailureCopyWith<$Res> {
-  factory $InvalidAccessTokenFailureCopyWith(InvalidAccessTokenFailure value,
-          $Res Function(InvalidAccessTokenFailure) then) =
-      _$InvalidAccessTokenFailureCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$InvalidAccessTokenFailureCopyWithImpl<$Res>
-    extends _$ApiFailureCopyWithImpl<$Res>
-    implements $InvalidAccessTokenFailureCopyWith<$Res> {
-  _$InvalidAccessTokenFailureCopyWithImpl(InvalidAccessTokenFailure _value,
-      $Res Function(InvalidAccessTokenFailure) _then)
-      : super(_value, (v) => _then(v as InvalidAccessTokenFailure));
-
-  @override
-  InvalidAccessTokenFailure get _value =>
-      super._value as InvalidAccessTokenFailure;
-}
-
-/// @nodoc
-
-class _$InvalidAccessTokenFailure implements InvalidAccessTokenFailure {
-  const _$InvalidAccessTokenFailure();
-
-  @override
-  String toString() {
-    return 'ApiFailure.invalidAccessToken()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is InvalidAccessTokenFailure);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() invalidAccessToken,
-    required TResult Function(String errorMessage) internalServerError,
-  }) {
-    return invalidAccessToken();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? invalidAccessToken,
-    TResult Function(String errorMessage)? internalServerError,
-  }) {
-    return invalidAccessToken?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? invalidAccessToken,
-    TResult Function(String errorMessage)? internalServerError,
-    required TResult orElse(),
-  }) {
-    if (invalidAccessToken != null) {
-      return invalidAccessToken();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(InvalidAccessTokenFailure value)
-        invalidAccessToken,
-    required TResult Function(InternalServerError value) internalServerError,
-  }) {
-    return invalidAccessToken(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
-    TResult Function(InternalServerError value)? internalServerError,
-  }) {
-    return invalidAccessToken?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
-    TResult Function(InternalServerError value)? internalServerError,
-    required TResult orElse(),
-  }) {
-    if (invalidAccessToken != null) {
-      return invalidAccessToken(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class InvalidAccessTokenFailure implements ApiFailure {
-  const factory InvalidAccessTokenFailure() = _$InvalidAccessTokenFailure;
-}
-
-/// @nodoc
-abstract class $InternalServerErrorCopyWith<$Res> {
+abstract class $InternalServerErrorCopyWith<$Res>
+    implements $ApiFailureCopyWith<$Res> {
   factory $InternalServerErrorCopyWith(
           InternalServerError value, $Res Function(InternalServerError) then) =
       _$InternalServerErrorCopyWithImpl<$Res>;
+  @override
   $Res call({String errorMessage});
 }
 
@@ -263,7 +165,6 @@ class _$InternalServerError implements InternalServerError {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() invalidAccessToken,
     required TResult Function(String errorMessage) internalServerError,
   }) {
     return internalServerError(errorMessage);
@@ -272,7 +173,6 @@ class _$InternalServerError implements InternalServerError {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? invalidAccessToken,
     TResult Function(String errorMessage)? internalServerError,
   }) {
     return internalServerError?.call(errorMessage);
@@ -281,7 +181,6 @@ class _$InternalServerError implements InternalServerError {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? invalidAccessToken,
     TResult Function(String errorMessage)? internalServerError,
     required TResult orElse(),
   }) {
@@ -294,8 +193,6 @@ class _$InternalServerError implements InternalServerError {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(InvalidAccessTokenFailure value)
-        invalidAccessToken,
     required TResult Function(InternalServerError value) internalServerError,
   }) {
     return internalServerError(this);
@@ -304,7 +201,6 @@ class _$InternalServerError implements InternalServerError {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
     TResult Function(InternalServerError value)? internalServerError,
   }) {
     return internalServerError?.call(this);
@@ -313,7 +209,6 @@ class _$InternalServerError implements InternalServerError {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
     TResult Function(InternalServerError value)? internalServerError,
     required TResult orElse(),
   }) {
@@ -328,7 +223,9 @@ abstract class InternalServerError implements ApiFailure {
   const factory InternalServerError({required String errorMessage}) =
       _$InternalServerError;
 
+  @override
   String get errorMessage;
+  @override
   @JsonKey(ignore: true)
   $InternalServerErrorCopyWith<InternalServerError> get copyWith =>
       throw _privateConstructorUsedError;

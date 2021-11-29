@@ -6,5 +6,4 @@ part 'chats_failures.freezed.dart';
 abstract class ChatsFailure with _$ChatsFailure {
   const factory ChatsFailure.serverError() = ChatsServerFailure;
   const factory ChatsFailure.noConnection() = NoConnectionFailure;
-  const factory ChatsFailure.invalidAccessToken() = InvalidAccessTokenFailure;
 }

@@ -6,7 +6,7 @@ import 'package:telleo/application/blocs/auth/auth_form/auth_form_bloc.dart';
 
 import 'package:telleo/domain/auth/auth_failure.dart';
 import 'package:telleo/domain/auth/auth_repository.dart';
-import 'package:telleo/domain/auth/value_objects.dart';
+import 'package:telleo/domain/core/value_objects.dart';
 
 import 'auth_form_bloc_test.mocks.dart';
 
@@ -66,10 +66,10 @@ void main() {
       test(
           'When SignIn is emitted and both the password and the email are valid authRepository.signInWithEmailAndPassword should be called, when that returns a unit signin was successful',
           () async {
-        const email = 'ze@songij.fr';
-        const password = 'URQfGnKkpfoaonssbaUq';
-        final initial = AuthFormState.initial().copyWith(
-            password: Password(password), emailAdress: EmailAdress(email));
+        final email = EmailAdress('ze@songij.fr');
+        final password = Password('URQfGnKkpfoaonssbaUq');
+        final initial = AuthFormState.initial()
+            .copyWith(password: password, emailAdress: email);
         bloc = AuthFormBloc(authRepository, initial);
 
         when(authRepository.signInWithEmailAndPassword(
@@ -101,10 +101,10 @@ void main() {
       test(
           'When SignIn is emitted and either the password or the email are invalid authRepository.signInWithEmailAndPassword should not be called',
           () async {
-        const email = 'zesongij.fr';
-        const password = 'URQfG';
-        final initial = AuthFormState.initial().copyWith(
-            password: Password(password), emailAdress: EmailAdress(email));
+        final email = EmailAdress('zesongij.fr');
+        final password = Password('URQf');
+        final initial = AuthFormState.initial()
+            .copyWith(password: password, emailAdress: email);
         bloc = AuthFormBloc(authRepository, initial);
 
         when(authRepository.signInWithEmailAndPassword(
@@ -133,10 +133,10 @@ void main() {
       test(
           'When SignIn is emitted and both the password and the email are valid authRepository.signInWithEmailAndPassword should be called, when that returns an auth failure signin was not successful',
           () async {
-        const email = 'ze@songij.fr';
-        const password = 'URQfGnKkpfoaonssbaUq';
-        final initial = AuthFormState.initial().copyWith(
-            password: Password(password), emailAdress: EmailAdress(email));
+        final email = EmailAdress('ze@songij.fr');
+        final password = Password('URQfGnKkpfoaonssbaUq');
+        final initial = AuthFormState.initial()
+            .copyWith(password: password, emailAdress: email);
         bloc = AuthFormBloc(authRepository, initial);
         const authFailure = AuthFailure.cancelledByUser();
 
@@ -171,10 +171,10 @@ void main() {
       test(
           'When SignUp is emitted and both the password and the email are valid authRepository.signUpWithEmailAndPassword should be called, when that returns a unit signin was successful',
           () async {
-        const email = 'ze@songij.fr';
-        const password = 'URQfGnKkpfoaonssbaUq';
-        final initial = AuthFormState.initial().copyWith(
-            password: Password(password), emailAdress: EmailAdress(email));
+        final email = EmailAdress('ze@songij.fr');
+        final password = Password('URQfGnKkpfoaonssbaUq');
+        final initial = AuthFormState.initial()
+            .copyWith(password: password, emailAdress: email);
         bloc = AuthFormBloc(authRepository, initial);
 
         when(authRepository.signUpWithEmailAndPassword(
@@ -206,10 +206,10 @@ void main() {
       test(
           'When SignUp is emitted and either the password or the email are invalid authRepository.signUpWithEmailAndPassword should not be called',
           () async {
-        const email = 'zesongij.fr';
-        const password = 'URQfG';
-        final initial = AuthFormState.initial().copyWith(
-            password: Password(password), emailAdress: EmailAdress(email));
+        final email = EmailAdress('zesongij.fr');
+        final password = Password('URQf');
+        final initial = AuthFormState.initial()
+            .copyWith(password: password, emailAdress: email);
         bloc = AuthFormBloc(authRepository, initial);
 
         when(authRepository.signUpWithEmailAndPassword(
@@ -238,10 +238,10 @@ void main() {
       test(
           'When SignUp is emitted and both the password and the email are valid authRepository.signUpWithEmailAndPassword should be called, when that returns an auth failure SignUp was not successful',
           () async {
-        const email = 'ze@songij.fr';
-        const password = 'URQfGnKkpfoaonssbaUq';
-        final initial = AuthFormState.initial().copyWith(
-            password: Password(password), emailAdress: EmailAdress(email));
+        final email = EmailAdress('ze@songij.fr');
+        final password = Password('URQfGnKkpfoaonssbaUq');
+        final initial = AuthFormState.initial()
+            .copyWith(password: password, emailAdress: email);
         bloc = AuthFormBloc(authRepository, initial);
         const authFailure = AuthFailure.cancelledByUser();
 
@@ -276,9 +276,6 @@ void main() {
       test(
           'When SignInGoogle is called authRepository.signInWithGoogle should be called, when that returns a unit signin was successful',
           () async {
-        const email = 'ze@songij.fr';
-        const password = 'URQfGnKkpfoaonssbaUq';
-
         when(authRepository.signInWithGoogle())
             .thenAnswer((_) async => right(unit));
 
@@ -304,8 +301,6 @@ void main() {
       test(
           'When SignInWithGoogle is emitted authRepository.signInWithGoogle should be called, when that returns an auth failure SignUp was not successful',
           () async {
-        const email = 'ze@songij.fr';
-        const password = 'URQfGnKkpfoaonssbaUq';
         final initial = initialState;
         const authFailure = AuthFailure.cancelledByUser();
 

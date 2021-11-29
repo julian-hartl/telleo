@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:telleo/application/blocs/chats/chats_bloc.dart';
 
-import 'package:telleo/application/blocs/home/chats/chats_bloc.dart';
 import 'package:telleo/application/blocs/home/chats_page/chats_page_bloc.dart';
 import 'package:telleo/domain/core/services/logger.dart';
 import 'package:telleo/presentation/utils/show_snackbar.dart';

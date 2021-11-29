@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/entities/chat_entity.dart';
-import 'package:telleo/domain/states/chats_data_state.dart';
+import 'package:telleo/domain/chats/chat_entity.dart';
+import 'package:telleo/domain/chats/chats_data_state.dart';
 
 @LazySingleton(as: ChatsDataState)
 class TelleoChatsState implements ChatsDataState {

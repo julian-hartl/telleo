@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:telleo/domain/chats/chats_repository.dart';
-import 'package:telleo/domain/states/chats_data_state.dart';
+import 'package:telleo/domain/chats/chats_data_state.dart';
 
 part 'chats_event.dart';
 part 'chats_state.dart';
@@ -26,7 +26,6 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
             emit(const ChatsState.error(
                 message: 'Please check your connection'));
           },
-          invalidAccessToken: (_) {},
         );
       }, (chats) {
         chatsState.update(chats);

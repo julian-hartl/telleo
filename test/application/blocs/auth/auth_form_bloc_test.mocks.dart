@@ -8,6 +8,7 @@ import 'package:dartz/dartz.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:telleo/domain/auth/auth_failure.dart' as _i5;
 import 'package:telleo/domain/auth/auth_repository.dart' as _i3;
+import 'package:telleo/domain/core/value_objects.dart' as _i6;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -30,7 +31,7 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
 
   @override
   _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>> signUpWithEmailAndPassword(
-          {String? email, String? password}) =>
+          {_i6.EmailAdress? email, _i6.Password? password}) =>
       (super.noSuchMethod(
               Invocation.method(#signUpWithEmailAndPassword, [],
                   {#email: email, #password: password}),
@@ -39,7 +40,7 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
           as _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>>);
   @override
   _i4.Future<_i2.Either<_i5.AuthFailure, _i2.Unit>> signInWithEmailAndPassword(
-          {String? email, String? password}) =>
+          {_i6.EmailAdress? email, _i6.Password? password}) =>
       (super.noSuchMethod(
               Invocation.method(#signInWithEmailAndPassword, [],
                   {#email: email, #password: password}),

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import 'failures.dart';
+import 'value_failures.dart';
 
 Either<InvalidEmailFailure<String>, String> validateEmail(String input) {
   bool emailValid = RegExp(
@@ -13,5 +13,11 @@ Either<InvalidEmailFailure<String>, String> validateEmail(String input) {
 Either<ShortPasswordFailure<String>, String> validatePassword(String input) {
   bool passwordShort = input.length < 8;
   if (passwordShort) return left(ShortPasswordFailure(failedValue: input));
+  return right(input);
+}
+
+Either<ShortNameFailure<String>, String> validateName(String input) {
+  bool nameShort = input.length < 2;
+  if (nameShort) return left(ShortNameFailure(failedValue: input));
   return right(input);
 }

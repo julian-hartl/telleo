@@ -24,10 +24,6 @@ class _$ChatsFailureTearOff {
   NoConnectionFailure noConnection() {
     return const NoConnectionFailure();
   }
-
-  InvalidAccessTokenFailure invalidAccessToken() {
-    return const InvalidAccessTokenFailure();
-  }
 }
 
 /// @nodoc
@@ -39,21 +35,18 @@ mixin _$ChatsFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() serverError,
     required TResult Function() noConnection,
-    required TResult Function() invalidAccessToken,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? serverError,
     TResult Function()? noConnection,
-    TResult Function()? invalidAccessToken,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? serverError,
     TResult Function()? noConnection,
-    TResult Function()? invalidAccessToken,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -61,22 +54,18 @@ mixin _$ChatsFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(ChatsServerFailure value) serverError,
     required TResult Function(NoConnectionFailure value) noConnection,
-    required TResult Function(InvalidAccessTokenFailure value)
-        invalidAccessToken,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(ChatsServerFailure value)? serverError,
     TResult Function(NoConnectionFailure value)? noConnection,
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ChatsServerFailure value)? serverError,
     TResult Function(NoConnectionFailure value)? noConnection,
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -141,7 +130,6 @@ class _$ChatsServerFailure implements ChatsServerFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() serverError,
     required TResult Function() noConnection,
-    required TResult Function() invalidAccessToken,
   }) {
     return serverError();
   }
@@ -151,7 +139,6 @@ class _$ChatsServerFailure implements ChatsServerFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? serverError,
     TResult Function()? noConnection,
-    TResult Function()? invalidAccessToken,
   }) {
     return serverError?.call();
   }
@@ -161,7 +148,6 @@ class _$ChatsServerFailure implements ChatsServerFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? serverError,
     TResult Function()? noConnection,
-    TResult Function()? invalidAccessToken,
     required TResult orElse(),
   }) {
     if (serverError != null) {
@@ -175,8 +161,6 @@ class _$ChatsServerFailure implements ChatsServerFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(ChatsServerFailure value) serverError,
     required TResult Function(NoConnectionFailure value) noConnection,
-    required TResult Function(InvalidAccessTokenFailure value)
-        invalidAccessToken,
   }) {
     return serverError(this);
   }
@@ -186,7 +170,6 @@ class _$ChatsServerFailure implements ChatsServerFailure {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(ChatsServerFailure value)? serverError,
     TResult Function(NoConnectionFailure value)? noConnection,
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
   }) {
     return serverError?.call(this);
   }
@@ -196,7 +179,6 @@ class _$ChatsServerFailure implements ChatsServerFailure {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ChatsServerFailure value)? serverError,
     TResult Function(NoConnectionFailure value)? noConnection,
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
     required TResult orElse(),
   }) {
     if (serverError != null) {
@@ -253,7 +235,6 @@ class _$NoConnectionFailure implements NoConnectionFailure {
   TResult when<TResult extends Object?>({
     required TResult Function() serverError,
     required TResult Function() noConnection,
-    required TResult Function() invalidAccessToken,
   }) {
     return noConnection();
   }
@@ -263,7 +244,6 @@ class _$NoConnectionFailure implements NoConnectionFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? serverError,
     TResult Function()? noConnection,
-    TResult Function()? invalidAccessToken,
   }) {
     return noConnection?.call();
   }
@@ -273,7 +253,6 @@ class _$NoConnectionFailure implements NoConnectionFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? serverError,
     TResult Function()? noConnection,
-    TResult Function()? invalidAccessToken,
     required TResult orElse(),
   }) {
     if (noConnection != null) {
@@ -287,8 +266,6 @@ class _$NoConnectionFailure implements NoConnectionFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(ChatsServerFailure value) serverError,
     required TResult Function(NoConnectionFailure value) noConnection,
-    required TResult Function(InvalidAccessTokenFailure value)
-        invalidAccessToken,
   }) {
     return noConnection(this);
   }
@@ -298,7 +275,6 @@ class _$NoConnectionFailure implements NoConnectionFailure {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(ChatsServerFailure value)? serverError,
     TResult Function(NoConnectionFailure value)? noConnection,
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
   }) {
     return noConnection?.call(this);
   }
@@ -308,7 +284,6 @@ class _$NoConnectionFailure implements NoConnectionFailure {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ChatsServerFailure value)? serverError,
     TResult Function(NoConnectionFailure value)? noConnection,
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
     required TResult orElse(),
   }) {
     if (noConnection != null) {
@@ -320,118 +295,4 @@ class _$NoConnectionFailure implements NoConnectionFailure {
 
 abstract class NoConnectionFailure implements ChatsFailure {
   const factory NoConnectionFailure() = _$NoConnectionFailure;
-}
-
-/// @nodoc
-abstract class $InvalidAccessTokenFailureCopyWith<$Res> {
-  factory $InvalidAccessTokenFailureCopyWith(InvalidAccessTokenFailure value,
-          $Res Function(InvalidAccessTokenFailure) then) =
-      _$InvalidAccessTokenFailureCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$InvalidAccessTokenFailureCopyWithImpl<$Res>
-    extends _$ChatsFailureCopyWithImpl<$Res>
-    implements $InvalidAccessTokenFailureCopyWith<$Res> {
-  _$InvalidAccessTokenFailureCopyWithImpl(InvalidAccessTokenFailure _value,
-      $Res Function(InvalidAccessTokenFailure) _then)
-      : super(_value, (v) => _then(v as InvalidAccessTokenFailure));
-
-  @override
-  InvalidAccessTokenFailure get _value =>
-      super._value as InvalidAccessTokenFailure;
-}
-
-/// @nodoc
-
-class _$InvalidAccessTokenFailure implements InvalidAccessTokenFailure {
-  const _$InvalidAccessTokenFailure();
-
-  @override
-  String toString() {
-    return 'ChatsFailure.invalidAccessToken()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is InvalidAccessTokenFailure);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() serverError,
-    required TResult Function() noConnection,
-    required TResult Function() invalidAccessToken,
-  }) {
-    return invalidAccessToken();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? serverError,
-    TResult Function()? noConnection,
-    TResult Function()? invalidAccessToken,
-  }) {
-    return invalidAccessToken?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? serverError,
-    TResult Function()? noConnection,
-    TResult Function()? invalidAccessToken,
-    required TResult orElse(),
-  }) {
-    if (invalidAccessToken != null) {
-      return invalidAccessToken();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ChatsServerFailure value) serverError,
-    required TResult Function(NoConnectionFailure value) noConnection,
-    required TResult Function(InvalidAccessTokenFailure value)
-        invalidAccessToken,
-  }) {
-    return invalidAccessToken(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(ChatsServerFailure value)? serverError,
-    TResult Function(NoConnectionFailure value)? noConnection,
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
-  }) {
-    return invalidAccessToken?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ChatsServerFailure value)? serverError,
-    TResult Function(NoConnectionFailure value)? noConnection,
-    TResult Function(InvalidAccessTokenFailure value)? invalidAccessToken,
-    required TResult orElse(),
-  }) {
-    if (invalidAccessToken != null) {
-      return invalidAccessToken(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class InvalidAccessTokenFailure implements ChatsFailure {
-  const factory InvalidAccessTokenFailure() = _$InvalidAccessTokenFailure;
 }

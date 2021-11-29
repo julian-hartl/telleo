@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import '../../domain/entities/user_entity.dart';
-import '../../domain/states/user_state.dart';
+import '../../domain/user/user_entity.dart';
+import '../../domain/user/user_state.dart';
 
 @LazySingleton(as: UserState)
 class TelleoUserState implements UserState {

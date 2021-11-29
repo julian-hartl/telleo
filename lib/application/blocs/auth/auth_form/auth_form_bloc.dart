@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../domain/auth/auth_failure.dart';
 import '../../../../domain/auth/auth_repository.dart';
-import '../../../../domain/auth/value_objects.dart';
+import '../../../../domain/core/value_objects.dart';
 
 part 'auth_form_bloc.freezed.dart';
 part 'auth_form_event.dart';
@@ -14,7 +14,8 @@ class AuthFormBloc extends Bloc<AuthFormEvent, AuthFormState> {
 
   Future<void> _performAuthAction(
       Emitter<AuthFormState> emit,
-      Future<Either<AuthFailure, Unit>> Function(String email, String password)
+      Future<Either<AuthFailure, Unit>> Function(
+              EmailAdress email, Password password)
           authAction) async {
     emit(state.copyWith(
         isSubmitting: true,
@@ -23,9 +24,7 @@ class AuthFormBloc extends Bloc<AuthFormEvent, AuthFormState> {
     final isEmailValid = state.emailAdress.isValid();
     final isPasswordValid = state.password.isValid();
     if (isEmailValid && isPasswordValid) {
-      final email = state.emailAdress.value.getOrElse(() => '');
-      final password = state.password.value.getOrElse(() => '');
-      final authResult = await authAction(email, password);
+      final authResult = await authAction(state.emailAdress, state.password);
 
       emit(state.copyWith(
           isSubmitting: false,

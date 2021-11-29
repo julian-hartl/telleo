@@ -2,10 +2,11 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:telleo/application/blocs/home/chats/chats_bloc.dart';
+import 'package:telleo/application/blocs/chats/chats_bloc.dart';
+
 import 'package:telleo/domain/chats/chats_failures.dart';
 import 'package:telleo/domain/chats/chats_repository.dart';
-import 'package:telleo/domain/states/chats_data_state.dart';
+import 'package:telleo/domain/chats/chats_data_state.dart';
 
 import '../../../../helpers/data_sets.dart';
 import 'chats_bloc_test.mocks.dart';

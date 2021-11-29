@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/user_entity.dart';
+import 'package:telleo/domain/core/value_objects.dart';
+import 'package:telleo/domain/user/user_entity.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
 @freezed
-class UserModel with _$UserModel implements UserEntity {
+class UserModel with _$UserModel {
   const factory UserModel({
     required String name,
     required String uid,
@@ -16,11 +17,19 @@ class UserModel with _$UserModel implements UserEntity {
 
   const UserModel._();
 
-  @JsonKey(ignore: true)
-  @override
-  List<Object?> get props => [name, uid, email];
+  UserEntity toEntity() {
+    return UserEntity(
+      name: Name(name),
+      uid: UniqueId.fromExistingUid(uid),
+      email: EmailAdress(email),
+    );
+  }
 
-  @JsonKey(ignore: true)
-  @override
-  bool? get stringify => true;
+  factory UserModel.fromEntity(UserEntity entity) {
+    return UserModel(
+      name: entity.name.getOrCrash(),
+      uid: entity.uid.getOrCrash(),
+      email: entity.email.getOrCrash(),
+    );
+  }
 }

@@ -1,9 +1,11 @@
 import 'package:injectable/injectable.dart';
+import 'package:telleo/domain/core/services/api_service/api_service.dart';
+import 'package:telleo/domain/core/value_objects.dart';
 import '../../domain/auth/auth_failure.dart';
 import 'package:dartz/dartz.dart';
 import '../../domain/auth/auth_repository.dart';
-import '../../domain/core/services/api_service.dart';
-import '../../domain/states/user_state.dart';
+
+import '../../domain/user/user_state.dart';
 
 @LazySingleton(as: AuthRepository)
 class TelleoAuthRepository implements AuthRepository {
@@ -14,7 +16,7 @@ class TelleoAuthRepository implements AuthRepository {
 
   @override
   Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword(
-      {required String email, required String password}) async {
+      {required EmailAdress email, required Password password}) async {
     return left(const AuthFailure.serverError());
   }
 
@@ -25,7 +27,7 @@ class TelleoAuthRepository implements AuthRepository {
 
   @override
   Future<Either<AuthFailure, Unit>> signUpWithEmailAndPassword(
-      {required String email, required String password}) async {
+      {required EmailAdress email, required Password password}) async {
     return left(const AuthFailure.serverError());
   }
 }

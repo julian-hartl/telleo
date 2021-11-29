@@ -146,6 +146,24 @@ class _$_UserModel extends _UserModel {
   @override
   final String email;
 
+  @override
+  String toString() {
+    return 'UserModel(name: $name, uid: $uid, email: $email)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _UserModel &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.email, email) || other.email == email));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, name, uid, email);
+
   @JsonKey(ignore: true)
   @override
   _$UserModelCopyWith<_UserModel> get copyWith =>

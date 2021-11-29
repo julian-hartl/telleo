@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import '../../../domain/user/user_repository.dart';
-import '../../../domain/states/user_state.dart';
+import '../../../domain/user/user_state.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -24,9 +24,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           noConnection: (_) {
             emit(
                 const AuthState.error(message: 'Please check your connection'));
-          },
-          invalidAccessToken: (_) {
-            //todo: request new accessToken
           },
         );
       }, (a) {

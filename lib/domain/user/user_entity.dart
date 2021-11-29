@@ -1,9 +1,11 @@
+import 'package:telleo/domain/core/value_objects.dart';
+
 import '../core/entity.dart';
 
 class UserEntity extends Entity {
-  final String name;
-  final String uid;
-  final String email;
+  final Name name;
+  final UniqueId uid;
+  final EmailAdress email;
   UserEntity({
     required this.name,
     required this.uid,

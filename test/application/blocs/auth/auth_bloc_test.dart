@@ -5,7 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:telleo/application/blocs/auth/auth_bloc.dart';
 import 'package:telleo/domain/user/user_failures.dart';
 import 'package:telleo/domain/user/user_repository.dart';
-import 'package:telleo/domain/states/user_state.dart';
+import 'package:telleo/domain/user/user_state.dart';
 
 import '../../../helpers/data_sets.dart';
 import 'auth_bloc_test.mocks.dart';

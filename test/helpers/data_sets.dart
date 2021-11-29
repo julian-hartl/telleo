@@ -1,8 +1,9 @@
-import 'package:telleo/domain/entities/chat_entity.dart';
-import 'package:telleo/domain/entities/user_entity.dart';
+import 'package:telleo/data/models/user_model.dart';
+import 'package:telleo/domain/chats/chat_entity.dart';
 
-final testUser = UserEntity(
-    name: 'Julian', uid: 'lsPVDPcQOJEnYdKNiDaL', email: 'muvhawnij@omzo.mz');
+final testUser = const UserModel(
+        name: 'Julian', uid: 'lsPVDPcQOJEnYdKNiDaL', email: 'muvhawnij@omzo.mz')
+    .toEntity();
 final chats = [
   ChatEntity(contact: testUser, messages: const ['Hello'])
 ];

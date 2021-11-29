@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:telleo/domain/core/value_objects.dart';
 import 'package:telleo/domain/user/user_failures.dart';
 import '../../domain/user/user_repository.dart';
-import '../../domain/entities/user_entity.dart';
+import '../../domain/user/user_entity.dart';
 
 @LazySingleton(as: UserRepository)
 class TelleoUserRepository implements UserRepository {
@@ -11,9 +12,9 @@ class TelleoUserRepository implements UserRepository {
     await Future.delayed(const Duration(seconds: 2));
     return right(some(
       UserEntity(
-        name: 'Lizzie Walker',
-        uid: 'WXxJvAdQMkvYzCZOstbG',
-        email: 'kosugow@ote.ec',
+        name: Name('Lizzie Walker'),
+        uid: UniqueId.fromExistingUid('WXxJvAdQMkvYzCZOstbG'),
+        email: EmailAdress('kosugow@ote.ec'),
       ),
     ));
   }

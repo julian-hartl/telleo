@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:telleo/application/blocs/home/chats/chats_bloc.dart';
+
 import 'application/blocs/auth/auth_bloc.dart';
 import 'presentation/constants/themes.dart';
 import 'presentation/routing/router.dart';

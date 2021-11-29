@@ -1,14 +1,15 @@
 import 'package:dartz/dartz.dart';
+import 'package:telleo/domain/core/value_objects.dart';
 import 'auth_failure.dart';
 
 abstract class AuthRepository {
   Future<Either<AuthFailure, Unit>> signUpWithEmailAndPassword({
-    required String email,
-    required String password,
+    required EmailAdress email,
+    required Password password,
   });
   Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword({
-    required String email,
-    required String password,
+    required EmailAdress email,
+    required Password password,
   });
 
   Future<Either<AuthFailure, Unit>> signInWithGoogle();

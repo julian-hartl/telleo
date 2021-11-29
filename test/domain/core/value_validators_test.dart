@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:telleo/domain/core/failures.dart';
+import 'package:telleo/domain/core/value_failures.dart';
 import 'package:telleo/domain/core/value_validators.dart';
 
 void main() {
