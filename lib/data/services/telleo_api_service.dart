@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/core/services/api_service/api_failure.dart';
-import 'package:telleo/domain/core/services/api_service/api_service.dart';
+import '../../domain/core/services/api_service/api_failure.dart';
+import '../../domain/core/services/api_service/api_service.dart';
 
 @LazySingleton(as: ApiService)
 class TelleoApiService implements ApiService {

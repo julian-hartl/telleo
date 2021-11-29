@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:uuid/uuid.dart';
+import 'base/value_object.dart';
 import 'value_failures.dart';
-import 'value_object.dart';
+
 import 'value_validators.dart';
 
 class EmailAdress extends ValueObject<String> {

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:telleo/domain/core/value_objects.dart';
-import 'package:telleo/domain/user/user_entity.dart';
+import '../../domain/core/value_objects.dart';
+import '../../domain/user/user_entity.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';

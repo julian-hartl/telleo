@@ -1,5 +1,6 @@
-import 'package:telleo/domain/core/entity.dart';
-import 'package:telleo/domain/user/user_entity.dart';
+import '../core/base/entity.dart';
+
+import '../user/user_entity.dart';
 
 class ChatEntity extends Entity {
   final UserEntity contact;

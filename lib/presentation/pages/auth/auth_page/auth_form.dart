@@ -82,7 +82,7 @@ class AuthForm extends StatelessWidget {
                                   ),
                               onChanged: (value) => context
                                   .read<AuthFormBloc>()
-                                  .add(AuthEmailChanged(value)),
+                                  .add(AuthFormEvent.emailChanged(value)),
                               decoration:
                                   outlineInputDecoration(theme, hint: 'Email'),
                               keyboardType: TextInputType.emailAddress,
@@ -104,7 +104,7 @@ class AuthForm extends StatelessWidget {
                                   ),
                               onChanged: (value) => context
                                   .read<AuthFormBloc>()
-                                  .add(AuthPasswordChanged(value)),
+                                  .add(AuthFormEvent.passwordChanged(value)),
                               decoration: outlineInputDecoration(theme,
                                   hint: 'Password'),
                               obscureText: true,
@@ -127,7 +127,7 @@ class AuthForm extends StatelessWidget {
                         onPressed: () {
                           context
                               .read<AuthFormBloc>()
-                              .add(const AuthSignInWithGoogle());
+                              .add(const AuthFormEvent.signInWithGoogle());
                         },
                       ),
                       const Gap(10),
@@ -139,14 +139,18 @@ class AuthForm extends StatelessWidget {
                       TelleoTextButton(
                         text: 'Sign In',
                         onPressed: () {
-                          context.read<AuthFormBloc>().add(const AuthSignIn());
+                          context
+                              .read<AuthFormBloc>()
+                              .add(const AuthFormEvent.signIn());
                         },
                       ),
                       const Gap(10),
                       TelleoTextButton(
                         text: 'Sign up',
                         onPressed: () {
-                          context.read<AuthFormBloc>().add(const AuthSignUp());
+                          context
+                              .read<AuthFormBloc>()
+                              .add(const AuthFormEvent.signUp());
                         },
                         buttonTheme: TelloTextButtonTheme.reversed,
                       ),

@@ -40,26 +40,26 @@ class AuthFormBloc extends Bloc<AuthFormEvent, AuthFormState> {
 
   AuthFormBloc(this.authRepository, [AuthFormState? initial])
       : super(initial ?? AuthFormState.initial()) {
-    on<AuthPasswordChanged>((event, emit) {
+    on<_PasswordChanged>((event, emit) {
       final updated = state.copyWith(password: Password(event.password));
       emit(updated);
     });
-    on<AuthEmailChanged>((event, emit) {
+    on<_EmailChanged>((event, emit) {
       emit(state.copyWith(emailAdress: EmailAdress(event.email)));
     });
-    on<AuthSignIn>((event, emit) async {
+    on<_SignIn>((event, emit) async {
       _performAuthAction(
           emit,
           (email, password) => authRepository.signInWithEmailAndPassword(
               email: email, password: password));
     });
-    on<AuthSignUp>((event, emit) async {
+    on<_SignUp>((event, emit) async {
       _performAuthAction(
           emit,
           (email, password) => authRepository.signUpWithEmailAndPassword(
               email: email, password: password));
     });
-    on<AuthSignInWithGoogle>((event, emit) async {
+    on<_SignInWithGoogle>((event, emit) async {
       emit(state.copyWith(
           isSubmitting: true,
           authFailureOrSuccess: none(),

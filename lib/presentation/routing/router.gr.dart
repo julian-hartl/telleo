@@ -35,10 +35,10 @@ class _$AppRouter extends RootStackRouter {
           opaque: true,
           barrierDismissible: false);
     },
-    ChatsPageRoute.name: (routeData) {
+    HomePageRoute.name: (routeData) {
       return CustomPage<dynamic>(
           routeData: routeData,
-          child: const ChatsPage(),
+          child: const HomePage(),
           transitionsBuilder: TransitionsBuilders.fadeIn,
           opaque: true,
           barrierDismissible: false);
@@ -50,7 +50,7 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(WelcomePageRoute.name, path: '/welcome-page'),
         RouteConfig(SplashPageRoute.name, path: '/'),
         RouteConfig(AuthPageRoute.name, path: '/auth-page'),
-        RouteConfig(ChatsPageRoute.name, path: '/chats-page')
+        RouteConfig(HomePageRoute.name, path: '/home-page')
       ];
 }
 
@@ -75,9 +75,9 @@ class AuthPageRoute extends PageRouteInfo<void> {
   static const String name = 'AuthPageRoute';
 }
 
-/// generated route for [ChatsPage]
-class ChatsPageRoute extends PageRouteInfo<void> {
-  const ChatsPageRoute() : super(name, path: '/chats-page');
+/// generated route for [HomePage]
+class HomePageRoute extends PageRouteInfo<void> {
+  const HomePageRoute() : super(name, path: '/home-page');
 
-  static const String name = 'ChatsPageRoute';
+  static const String name = 'HomePageRoute';
 }

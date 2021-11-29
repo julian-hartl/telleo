@@ -1,6 +1,8 @@
-import 'package:telleo/domain/core/value_objects.dart';
+import '../core/base/entity.dart';
 
-import '../core/entity.dart';
+import '../core/value_objects.dart';
+
+export '../core/value_objects.dart';
 
 class UserEntity extends Entity {
   final Name name;

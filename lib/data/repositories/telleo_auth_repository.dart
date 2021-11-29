@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/core/services/api_service/api_service.dart';
-import 'package:telleo/domain/core/value_objects.dart';
+import '../../domain/core/services/api_service/api_service.dart';
+import '../../domain/core/value_objects.dart';
 import '../../domain/auth/auth_failure.dart';
 import 'package:dartz/dartz.dart';
 import '../../domain/auth/auth_repository.dart';

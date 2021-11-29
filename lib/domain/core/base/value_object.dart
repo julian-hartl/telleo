@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
-import 'value_failures.dart';
+import '../value_failures.dart';
 
 abstract class ValueObject<T> extends Equatable {
   const ValueObject();

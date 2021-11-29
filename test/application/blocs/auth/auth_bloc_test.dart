@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:telleo/application/blocs/auth/auth_bloc.dart';
+import 'package:telleo/domain/core/async_value.dart';
 import 'package:telleo/domain/user/user_failures.dart';
 import 'package:telleo/domain/user/user_repository.dart';
 import 'package:telleo/domain/user/user_state.dart';
@@ -30,17 +31,20 @@ void main() {
       test(
           'it should call userRepository.getCurrentUser and when a user is returned it should update the userState and emit an Authenticated event',
           () async {
+        final answer = some(testUser);
         when(userRepository.getCurrentUser())
-            .thenAnswer((_) => Future.value(right(some(testUser))));
+            .thenAnswer((_) => Future.value(right(answer)));
         when(userState.update(any)).thenAnswer((_) {});
-        sut.add(const RequestUserCheck());
+        sut.add(const AuthEvent.requestUserCheck());
         expectLater(sut.stream, emits(const AuthState.authenticated()));
 
         await untilCalled(userRepository.getCurrentUser());
         await untilCalled(userState.update(any));
 
-        verifyInOrder(
-            [userRepository.getCurrentUser(), userState.update(testUser)]);
+        verifyInOrder([
+          userRepository.getCurrentUser(),
+          userState.update(AsyncValue.data(answer))
+        ]);
         verifyNoMoreInteractions(userRepository);
         verifyNoMoreInteractions(userState);
       });
@@ -52,7 +56,7 @@ void main() {
             .thenAnswer((_) => Future.value(right(none())));
         when(userState.update(any)).thenAnswer((_) {});
 
-        sut.add(const RequestUserCheck());
+        sut.add(const AuthEvent.requestUserCheck());
         expectLater(sut.stream, emits(const AuthState.unauthenticated()));
 
         await untilCalled(userRepository.getCurrentUser());
@@ -70,7 +74,7 @@ void main() {
         when(userRepository.getCurrentUser()).thenAnswer(
             (_) => Future.value(left(const UserFailure.serverError())));
 
-        sut.add(const RequestUserCheck());
+        sut.add(const AuthEvent.requestUserCheck());
         expectLater(sut.stream,
             emits(const AuthState.error(message: 'Internal server error')));
 
@@ -86,7 +90,7 @@ void main() {
         when(userRepository.getCurrentUser()).thenAnswer(
             (_) => Future.value(left(const UserFailure.noConnection())));
 
-        sut.add(const RequestUserCheck());
+        sut.add(const AuthEvent.requestUserCheck());
         expectLater(
           sut.stream,
           emits(
@@ -106,8 +110,8 @@ void main() {
           'it should set the current user to null and emit an unauthenticated event',
           () async {
         when(userState.update(any)).thenAnswer((_) {});
-        sut.add(const SignOut());
-        expectLater(sut.stream, emits(const Unauthenticated()));
+        sut.add(const AuthEvent.signOut());
+        expectLater(sut.stream, emits(const AuthState.authenticated()));
 
         await untilCalled(userState.update(any));
         verify(userState.update(null));

@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import '../../../domain/core/async_value.dart';
 import '../../../domain/user/user_repository.dart';
 import '../../../domain/user/user_state.dart';
 
@@ -13,31 +15,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository userRepository;
   final UserState userState;
 
-  AuthBloc(this.userRepository, this.userState) : super(const _Initial()) {
-    on<RequestUserCheck>((event, emit) async {
-      final userResult = await userRepository.getCurrentUser();
-      userResult.fold((failure) {
-        failure.map(
-          serverError: (_) {
-            emit(const AuthState.error(message: 'Internal server error'));
-          },
-          noConnection: (_) {
-            emit(
-                const AuthState.error(message: 'Please check your connection'));
-          },
-        );
-      }, (a) {
-        a.fold(() {
-          userState.update(null);
-          emit(const AuthState.unauthenticated());
-        }, (a) {
-          userState.update(a);
-          emit(const AuthState.authenticated());
-        });
-      });
+  AuthBloc(this.userRepository, this.userState) : super(const _Loading()) {
+    userState.addListener((asyncUser) {
+      add(const _RequestUserCheck());
     });
-    on<SignOut>((event, emit) {
-      userState.update(null);
+    on<_RequestUserCheck>((event, emit) async {
+      userState.value.map(
+        data: (userValue) {
+          final user = userValue.data;
+          user.fold(() => emit(const _Unauthenticated()),
+              (a) => emit(const _Authenticated()));
+        },
+        loading: (_) => emit(const _Loading()),
+        error: (err) => emit(
+          AuthState.error(message: err.message),
+        ),
+      );
+    });
+    on<_SignOut>((event, emit) {
+      userState.update(AsyncValue.data(none()));
       emit(const AuthState.unauthenticated());
     });
   }

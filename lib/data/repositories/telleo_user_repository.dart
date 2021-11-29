@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/core/value_objects.dart';
-import 'package:telleo/domain/user/user_failures.dart';
+import '../../domain/core/value_objects.dart';
+import '../../domain/user/user_failures.dart';
 import '../../domain/user/user_repository.dart';
 import '../../domain/user/user_entity.dart';
 
