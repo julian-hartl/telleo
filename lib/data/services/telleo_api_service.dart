@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+
 import '../../domain/core/services/api_service/api_failure.dart';
 import '../../domain/core/services/api_service/api_service.dart';
 

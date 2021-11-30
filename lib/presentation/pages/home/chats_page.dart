@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-import '../../../domain/chats/chat_entity.dart';
-import '../../../domain/core/services/logger.dart';
-import '../../widgets/telleo_widgets/telleo_text_button.dart';
-import '../../../utils/dependencies.dart';
 
+import '../../../application/blocs/app/bloc/app_bloc.dart';
 import '../../../application/blocs/home/chats_page/chats_page_bloc.dart';
-import '../../utils/show_snackbar.dart';
+import '../../../domain/chats/chat_entity.dart';
+import '../../../utils/dependencies.dart';
 
 class ChatsPage extends StatelessWidget {
   const ChatsPage({Key? key}) : super(key: key);
@@ -15,35 +12,29 @@ class ChatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatsPageBloc(),
+      create: (context) => ChatsPageBloc(app.get<AppBloc>()),
       child: Scaffold(
-        body: BlocConsumer<ChatsPageBloc, ChatsPageState>(
-          listener: (context, state) {
-            state.chats.maybeMap(
-              error: (value) {
-                showErrorSnackbar(context, message: value.message);
-              },
-              orElse: () {},
-            );
-          },
+        body: BlocBuilder<ChatsPageBloc, ChatsPageState>(
           builder: (context, state) {
-            return state.chats.map(
-              data: (chats) => ListView.builder(
-                itemBuilder: (context, index) =>
-                    ChatItem(chat: chats.data[index]),
-                itemCount: chats.data.length,
-              ),
-              loading: (_) => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              error: (err) => Column(
-                children: [
-                  Text(err.message),
+            return state.loading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) =>
+                            ChatItem(chat: state.chats[index]),
+                        itemCount: state.chats.length,
+                      ),
+                      /*
+              Text(err.message),
                   const Gap(10),
                   TelleoTextButton(text: 'Retry', onPressed: () {})
-                ],
-              ),
-            );
+                  */
+                    ],
+                  );
           },
         ),
       ),

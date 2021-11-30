@@ -52,4 +52,5 @@ lib/config.dart
 **/*.g.dart
 **/*.config.dart
 **/*.gr.dart
+**/*.mocks.dart
 

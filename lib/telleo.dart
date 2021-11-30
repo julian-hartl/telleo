@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'application/blocs/app/bloc/app_bloc.dart';
 import 'domain/user/user_state.dart';
 
 import 'application/blocs/auth/auth_bloc.dart';
@@ -20,12 +21,22 @@ class Telleo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.microtask(() => app.get<UserState>().load());
-    return MaterialApp.router(
-      title: 'Flutter Demo',
-      theme: darkTheme,
-      routeInformationParser: appRouter.defaultRouteParser(),
-      routerDelegate: AutoRouterDelegate(appRouter),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => app.get<AuthBloc>(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              app.get<AppBloc>()..add(const AppEvent.updateUser()),
+        )
+      ],
+      child: MaterialApp.router(
+        title: 'Flutter Demo',
+        theme: darkTheme,
+        routeInformationParser: appRouter.defaultRouteParser(),
+        routerDelegate: AutoRouterDelegate(appRouter),
+      ),
     );
   }
 }

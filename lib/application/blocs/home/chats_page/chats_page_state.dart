@@ -3,9 +3,11 @@ part of 'chats_page_bloc.dart';
 @freezed
 class ChatsPageState with _$ChatsPageState {
   factory ChatsPageState.initial() => const ChatsPageState(
-        chats: AsyncValue.loading(),
+        chats: [],
+        loading: true,
       );
   const factory ChatsPageState({
-    required AsyncValue<List<ChatEntity>> chats,
+    required List<ChatEntity> chats,
+    required bool loading,
   }) = _ChatsPageState;
 }

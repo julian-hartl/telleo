@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import '../pages/home/home_page.dart';
+
 import '../pages/auth/auth_page/auth_page.dart';
 import '../pages/auth/welcome_page.dart';
+import '../pages/home/home_page.dart';
 import '../pages/splash_page.dart';
 
 part 'router.gr.dart';

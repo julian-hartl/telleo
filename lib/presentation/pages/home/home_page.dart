@@ -10,9 +10,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.microtask(() {
-      app.get<ChatsState>().load();
-    });
     return Scaffold(
       body: const ChatsPage(),
     );

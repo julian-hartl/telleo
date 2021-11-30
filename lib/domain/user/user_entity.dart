@@ -1,5 +1,4 @@
 import '../core/base/entity.dart';
-
 import '../core/value_objects.dart';
 
 export '../core/value_objects.dart';

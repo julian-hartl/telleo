@@ -1,5 +1,4 @@
 import '../core/base/entity.dart';
-
 import '../user/user_entity.dart';
 
 class ChatEntity extends Entity {

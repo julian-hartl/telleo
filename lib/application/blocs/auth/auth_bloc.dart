@@ -1,40 +1,42 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import '../../../domain/core/async_value.dart';
-import '../../../domain/user/user_repository.dart';
-import '../../../domain/user/user_state.dart';
 
+import '../../../domain/user/user_entity.dart';
+import '../app/bloc/app_bloc.dart';
+
+part 'auth_bloc.freezed.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
-part 'auth_bloc.freezed.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final UserRepository userRepository;
-  final UserState userState;
+  final AppBloc appBloc;
+  @visibleForTesting
+  late final StreamSubscription<AppState> appStateStream;
 
-  AuthBloc(this.userRepository, this.userState) : super(const _Loading()) {
-    userState.addListener((asyncUser) {
-      add(const _RequestUserCheck());
+  AuthBloc(this.appBloc) : super(const _Loading()) {
+    appStateStream = appBloc.stream.listen((event) {
+      add(_RequestUserCheck(user: event.user));
     });
+    appBloc.add(const AppEvent.updateUser());
     on<_RequestUserCheck>((event, emit) async {
-      userState.value.map(
-        data: (userValue) {
-          final user = userValue.data;
-          user.fold(() => emit(const _Unauthenticated()),
-              (a) => emit(const _Authenticated()));
-        },
-        loading: (_) => emit(const _Loading()),
-        error: (err) => emit(
-          AuthState.error(message: err.message),
-        ),
-      );
+      final user = event.user;
+      user.fold(() => emit(const AuthState.unauthenticated()),
+          (a) => emit(const AuthState.authenticated()));
     });
     on<_SignOut>((event, emit) {
-      userState.update(AsyncValue.data(none()));
+      appBloc.add(AppEvent.updateUser(user: none()));
       emit(const AuthState.unauthenticated());
     });
+  }
+
+  @override
+  Future<void> close() {
+    appStateStream.cancel();
+    return super.close();
   }
 }

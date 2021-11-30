@@ -1,7 +1,8 @@
-import '../../change_notifier.dart';
+import 'package:dartz/dartz.dart';
 
-abstract class ValueState<T> extends StateChangeNotifier<T> {
-  T get value;
-  void update(T value);
-  Future<void> load();
+abstract class ValueState<T> {
+  ValueState();
+  Option<T> get value;
+  void update(Option<T> value);
+  T getOrCrash() => value.fold(() => throw Error(), (a) => a);
 }
