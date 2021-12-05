@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import '../../domain/user/user_repository.dart';
+
+import '../../domain/core/async_value.dart';
 import '../../domain/user/user_entity.dart';
+import '../../domain/user/user_repository.dart';
 import '../../domain/user/user_state.dart';
 
 @LazySingleton(as: UserState)
@@ -10,13 +12,13 @@ class TelleoUserState extends UserState {
 
   TelleoUserState(this.userRepository);
 
-  Option<UserEntity> _value = none();
+  AsyncValue<Option<UserEntity>> _value = const AsyncValue.loading();
 
   @override
-  void update(Option<UserEntity> value) {
+  void update(AsyncValue<Option<UserEntity>> value) {
     _value = value;
   }
 
   @override
-  Option<UserEntity> get value => _value;
+  AsyncValue<Option<UserEntity>> get value => _value;
 }

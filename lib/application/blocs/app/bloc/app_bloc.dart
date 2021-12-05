@@ -2,6 +2,12 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import '../../../../config.dart';
+import '../../../../domain/core/services/logger.dart';
+import '../../../../utils/dependencies.dart';
+import '../../../../domain/core/async_value.dart';
+import '../../../../domain/errors.dart';
 import '../../../../domain/chats/chat_entity.dart';
 import '../../../../domain/chats/chats_repository.dart';
 import '../../../../domain/chats/chats_state.dart';
@@ -16,7 +22,7 @@ part 'app_bloc.freezed.dart';
 @lazySingleton
 class AppBloc extends Bloc<AppEvent, AppState> {
   final UserState userState;
-  final CurrentChatsState chatsState;
+  final ChatsState chatsState;
   final UserRepository userRepository;
   final ChatsRepository chatsRepository;
 
@@ -27,35 +33,51 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     this.chatsRepository,
   ) : super(AppState.initial()) {
     on<_UpdateUser>((event, emit) async {
+      emit(state.copyWith(user: const AsyncValue.loading()));
       final user = event.user;
-      late final Option<UserEntity> result;
+      late final AsyncValue<Option<UserEntity>> result;
       if (user != null) {
         result = user;
       } else {
         final currentUserResult = await userRepository.getCurrentUser();
-        currentUserResult.fold(
-          (l) => null,
-          (userOption) => result = userOption,
+        result = currentUserResult.fold(
+          (l) => AsyncValue.error(
+            l.map(
+              serverError: (_) => ErrorMessage.internalServerError,
+              noConnection: (_) => ErrorMessage.connectionError,
+            ),
+          ),
+          (userOption) => AsyncValue.data(userOption),
         );
       }
-      userState.update(result);
-      emit(state.copyWith(user: result));
+      if (result != state.user) {
+        userState.update(result);
+        emit(state.copyWith(user: result));
+      }
     });
     on<_UpdateChats>((event, emit) async {
+      emit(state.copyWith(chats: const AsyncValue.loading()));
       final chats = event.chats;
 
-      late final Option<List<ChatEntity>> result;
+      late final AsyncValue<List<ChatEntity>> result;
       if (chats != null) {
         result = chats;
       } else {
         final chatsResult = await chatsRepository.getChats();
-        chatsResult.fold(
-          (l) => null,
-          (chats) => result = some(chats),
+        result = chatsResult.fold(
+          (l) => AsyncValue.error(
+            l.map(
+              serverError: (_) => ErrorMessage.internalServerError,
+              noConnection: (_) => ErrorMessage.connectionError,
+            ),
+          ),
+          (chats) => AsyncValue.data(chats),
         );
       }
-      chatsState.update(result);
-      emit(state.copyWith(chats: result));
+      if (result != state.chats) {
+        chatsState.update(result);
+        emit(state.copyWith(chats: result));
+      }
     });
   }
 }

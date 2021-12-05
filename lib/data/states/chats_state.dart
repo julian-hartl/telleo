@@ -1,18 +1,19 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import '../../domain/core/async_value.dart';
 
 import '../../domain/chats/chat_entity.dart';
 import '../../domain/chats/chats_state.dart';
 
-@LazySingleton(as: CurrentChatsState)
-class TelleoChatsState extends CurrentChatsState {
-  late Option<List<ChatEntity>> _value;
+@LazySingleton(as: ChatsState)
+class TelleoChatsState extends ChatsState {
+  AsyncValue<List<ChatEntity>> _value = const AsyncValue.loading();
 
   @override
-  void update(Option<List<ChatEntity>> value) {
+  void update(AsyncValue<List<ChatEntity>> value) {
     _value = value;
   }
 
   @override
-  Option<List<ChatEntity>> get value => _value;
+  AsyncValue<List<ChatEntity>> get value => _value;
 }

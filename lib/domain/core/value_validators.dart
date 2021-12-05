@@ -21,3 +21,13 @@ Either<ShortNameFailure<String>, String> validateName(String input) {
   if (nameShort) return left(ShortNameFailure(failedValue: input));
   return right(input);
 }
+
+Either<InvalidUrlFailure<String>, String> validateUrl(String input) {
+  final bool validUrl = RegExp(
+          r"""https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)""")
+      .hasMatch(input);
+  if (validUrl) {
+    return right(input);
+  }
+  return left(InvalidUrlFailure(input));
+}

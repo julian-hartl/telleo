@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
@@ -5,4 +6,6 @@ import 'package:logger/logger.dart';
 abstract class RegisterModule {
   @lazySingleton
   Logger logger() => Logger();
+  @lazySingleton
+  Dio dio() => Dio();
 }

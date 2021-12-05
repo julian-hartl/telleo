@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
+import '../async_value.dart';
 
 abstract class ValueState<T> {
   ValueState();
-  Option<T> get value;
-  void update(Option<T> value);
-  T getOrCrash() => value.fold(() => throw Error(), (a) => a);
+  T get value;
+  void update(T value);
 }

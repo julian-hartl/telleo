@@ -26,7 +26,9 @@ class AuthForm extends StatelessWidget {
             listener: (context, state) {
               state.authFailureOrSuccess.fold(
                 () {},
-                (either) => either.fold(
+                (either) {
+                  /*
+                  either.fold(
                     (failure) => app.get<ILogger>().logInfo(
                           failure.map(
                             serverError: (_) => 'Server error',
@@ -36,7 +38,9 @@ class AuthForm extends StatelessWidget {
                             emailAlreadyInUse: (_) => 'Email already in use',
                           ),
                         ),
-                    (r) => null),
+                    (r) => null)
+                  */
+                },
               );
             },
             builder: (context, state) {
@@ -47,11 +51,11 @@ class AuthForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Let\'s sign you in.',
-                          style: theme.textTheme.headline3!),
+                          style: theme.textTheme.headline1!),
                       const Gap(10),
                       Text(
                         'Welcome back.',
-                        style: theme.textTheme.headline4!.copyWith(
+                        style: theme.textTheme.headline2!.copyWith(
                           fontWeight: FontWeight.normal,
                         ),
                       ),

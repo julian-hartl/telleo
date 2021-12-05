@@ -5,31 +5,33 @@ import 'package:mockito/mockito.dart';
 import 'package:telleo/application/blocs/app/bloc/app_bloc.dart';
 import 'package:telleo/domain/chats/chats_repository.dart';
 import 'package:telleo/domain/chats/chats_state.dart';
+import 'package:telleo/domain/core/async_value.dart';
 import 'package:telleo/domain/user/user_repository.dart';
 import 'package:telleo/domain/user/user_state.dart';
 
 import '../../../../helpers/data_sets.dart';
 import 'app_bloc_test.mocks.dart';
 
-@GenerateMocks([UserState, CurrentChatsState, UserRepository, ChatsRepository])
+@GenerateMocks([UserState, ChatsState, UserRepository, ChatsRepository])
 void main() {
   group('AppBloc', () {
     late AppBloc sut;
     late MockUserState userState;
-    late MockCurrentChatsState chatsState;
+    late MockChatsState chatsState;
     late MockUserRepository userRepository;
     late MockChatsRepository chatsRepository;
 
     setUp(() {
       userState = MockUserState();
-      chatsState = MockCurrentChatsState();
+      chatsState = MockChatsState();
       userRepository = MockUserRepository();
       chatsRepository = MockChatsRepository();
       sut = AppBloc(userState, chatsState, userRepository, chatsRepository);
     });
 
     test('initial state should be as shown in body', () {
-      final expectedInitial = AppState(user: none(), chats: none());
+      final expectedInitial = AppState(
+          user: const AsyncValue.loading(), chats: const AsyncValue.loading());
 
       expect(sut.state, expectedInitial);
     });
@@ -46,14 +48,15 @@ void main() {
             sut.stream,
             emitsInOrder(
               [
-                sut.state.copyWith(user: some(testUser)),
+                sut.state.copyWith(user: const AsyncValue.loading()),
+                sut.state.copyWith(user: AsyncValue.data(some(testUser))),
               ],
             ),
           );
           sut.add(const AppEvent.updateUser());
           await untilCalled(userRepository.getCurrentUser());
           await untilCalled(userState.update(any));
-          verify(userState.update(some(testUser)));
+          verify(userState.update(AsyncValue.data(some(testUser))));
           verify(userRepository.getCurrentUser());
           verifyNoMoreInteractions(userState);
           verifyNoMoreInteractions(userRepository);
@@ -73,14 +76,15 @@ void main() {
             sut.stream,
             emitsInOrder(
               [
-                sut.state.copyWith(user: some(testUser)),
+                sut.state.copyWith(user: const AsyncValue.loading()),
+                sut.state.copyWith(user: AsyncValue.data(some(testUser))),
               ],
             ),
           );
-          sut.add(AppEvent.updateUser(user: some(testUser)));
+          sut.add(AppEvent.updateUser(user: AsyncValue.data(some(testUser))));
 
           await untilCalled(userState.update(any));
-          verify(userState.update(some(testUser)));
+          verify(userState.update(AsyncValue.data(some(testUser))));
 
           verifyNoMoreInteractions(userState);
           verifyZeroInteractions(userRepository);
@@ -102,14 +106,15 @@ void main() {
             sut.stream,
             emitsInOrder(
               [
-                sut.state.copyWith(chats: some(testChats)),
+                sut.state.copyWith(user: const AsyncValue.loading()),
+                sut.state.copyWith(chats: AsyncValue.data(testChats)),
               ],
             ),
           );
           sut.add(const AppEvent.updateChats());
           await untilCalled(chatsRepository.getChats());
           await untilCalled(chatsState.update(any));
-          verify(chatsState.update(some(testChats)));
+          verify(chatsState.update(AsyncValue.data(testChats)));
           verify(chatsRepository.getChats());
           verifyNoMoreInteractions(chatsState);
           verifyZeroInteractions(userState);
@@ -128,13 +133,14 @@ void main() {
             sut.stream,
             emitsInOrder(
               [
-                sut.state.copyWith(chats: some(testChats)),
+                sut.state.copyWith(user: const AsyncValue.loading()),
+                sut.state.copyWith(chats: AsyncValue.data(testChats)),
               ],
             ),
           );
-          sut.add(AppEvent.updateChats(chats: some(testChats)));
+          sut.add(AppEvent.updateChats(chats: AsyncValue.data(testChats)));
           await untilCalled(chatsState.update(any));
-          verify(chatsState.update(some(testChats)));
+          verify(chatsState.update(AsyncValue.data(testChats)));
           verifyNoMoreInteractions(chatsState);
           verifyZeroInteractions(userState);
           verifyZeroInteractions(chatsRepository);

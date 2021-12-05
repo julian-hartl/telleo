@@ -48,13 +48,16 @@ class AuthFormBloc extends Bloc<AuthFormEvent, AuthFormState> {
       emit(state.copyWith(emailAdress: EmailAdress(event.email)));
     });
     on<_SignIn>((event, emit) async {
-      _performAuthAction(
-          emit,
-          (email, password) => authRepository.signInWithEmailAndPassword(
-              email: email, password: password));
+      await _performAuthAction(
+        emit,
+        (email, password) => authRepository.signInWithEmailAndPassword(
+          email: email.getOrCrash(),
+          password: password.getOrCrash(),
+        ),
+      );
     });
     on<_SignUp>((event, emit) async {
-      _performAuthAction(
+      await _performAuthAction(
           emit,
           (email, password) => authRepository.signUpWithEmailAndPassword(
               email: email, password: password));

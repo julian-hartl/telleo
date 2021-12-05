@@ -52,3 +52,14 @@ class UniqueId extends ValueObject<String> {
 
   const UniqueId._(this.value);
 }
+
+class ProfilePictureUrl extends ValueObject<String> {
+  factory ProfilePictureUrl(String input) {
+    return ProfilePictureUrl._(validateUrl(input));
+  }
+
+  @override
+  final Either<GeneralValueFailure<String>, String> value;
+
+  const ProfilePictureUrl._(this.value);
+}

@@ -1,6 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../../domain/core/value_objects.dart';
 import '../../domain/user/user_entity.dart';
+import '../../domain/core/dartz_option_ext.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
@@ -11,6 +14,7 @@ class UserModel with _$UserModel {
     required String name,
     required String uid,
     required String email,
+    required String profilePictureUrl,
   }) = _UserModel;
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
@@ -22,6 +26,7 @@ class UserModel with _$UserModel {
       name: Name(name),
       uid: UniqueId.fromExistingUid(uid),
       email: EmailAdress(email),
+      profilePictureUrl: some(ProfilePictureUrl(profilePictureUrl)),
     );
   }
 
@@ -30,6 +35,7 @@ class UserModel with _$UserModel {
       name: entity.name.getOrCrash(),
       uid: entity.uid.getOrCrash(),
       email: entity.email.getOrCrash(),
+      profilePictureUrl: entity.profilePictureUrl.getOrCrash().getOrCrash(),
     );
   }
 }

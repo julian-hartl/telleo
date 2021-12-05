@@ -1,4 +1,4 @@
-# chat_application
+# Telleo
 
 A new Flutter project.
 

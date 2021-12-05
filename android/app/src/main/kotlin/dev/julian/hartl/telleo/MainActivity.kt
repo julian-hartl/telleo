@@ -1,4 +1,4 @@
-package dev.julian.hartl.chat_application
+package dev.julian.hartl.telleo
 
 import io.flutter.embedding.android.FlutterActivity
 

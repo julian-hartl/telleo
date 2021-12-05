@@ -9,8 +9,8 @@ abstract class AuthRepository {
     required Password password,
   });
   Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword({
-    required EmailAdress email,
-    required Password password,
+    required String email,
+    required String password,
   });
 
   Future<Either<AuthFailure, Unit>> signInWithGoogle();

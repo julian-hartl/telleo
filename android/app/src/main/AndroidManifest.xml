@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.julian.hartl.chat_application">
+    package="dev.julian.hartl.telleo">
    <application
-        android:label="chat_application"
+        android:label="telleo"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
