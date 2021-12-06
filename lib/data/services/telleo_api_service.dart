@@ -109,10 +109,7 @@ class TelleoApiService implements ApiService {
         final code = response['code'] as int;
         if (isAccessTokenExpired(code)) {
           await refreshAccessToken();
-          app.get<ILogger>().logInfo('Waiting 5 seconds before next request.');
-
-          await Future.delayed(const Duration(seconds: 5));
-          return await get(path: path);
+          // return await get(path: path);
           return left(const ApiFailure.internalServerError());
         } else {
           return left(
@@ -146,10 +143,8 @@ class TelleoApiService implements ApiService {
         final code = response['code'] as int;
         if (isAccessTokenExpired(code)) {
           await refreshAccessToken();
-          app.get<ILogger>().logInfo('Waiting 5 seconds before next request.');
 
-          await Future.delayed(const Duration(seconds: 5));
-          return await post(path: path, data: data);
+          // return await post(path: path, data: data);
           return left(const ApiFailure.internalServerError());
         } else {
           return left(

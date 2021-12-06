@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:telleo/application/blocs/home/chat_page/chat_page_bloc.dart';
 import 'package:telleo/domain/chats/message_entity.dart';
@@ -9,7 +10,7 @@ import 'package:telleo/utils/dependencies.dart';
 import '../../../domain/chats/chat_entity.dart';
 import '../../constants/decorations.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends HookWidget {
   final ChatPageBloc bloc;
 
   const ChatPage({Key? key, required this.bloc}) : super(key: key);
@@ -28,6 +29,8 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController messageController = useTextEditingController();
+
     return BlocConsumer<ChatPageBloc, ChatPageState>(
       listener: (context, state) {
         // TODO: implement listener
@@ -91,8 +94,16 @@ class ChatPage extends StatelessWidget {
                           Theme.of(context),
                           hint: 'Message',
                         ),
+                        controller: messageController,
                       )),
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.send))
+                      IconButton(
+                          onPressed: () {
+                            bloc.add(
+                              ChatPageEvent.sendMessage(messageController.text),
+                            );
+                            messageController.clear();
+                          },
+                          icon: const Icon(Icons.send))
                     ],
                   ),
                 )

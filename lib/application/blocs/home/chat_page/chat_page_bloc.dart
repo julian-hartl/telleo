@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:telleo/application/blocs/home/chats_page/chats_page_bloc.dart';
 import 'package:telleo/domain/chats/chat_entity.dart';
+import 'package:telleo/domain/core/services/logger.dart';
+import 'package:telleo/domain/core/services/socket_service/socket_service.dart';
 import 'package:telleo/domain/user/user_entity.dart';
 import 'package:telleo/domain/user/user_state.dart';
 import 'package:telleo/utils/dependencies.dart';
@@ -18,8 +20,22 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
             currentUser: app.get<UserState>().getOrCrash(),
           ),
         ) {
-    on<ChatPageEvent>((event, emit) {
-      // TODO: implement event handler
+    on<_OnMessageReceieved>((event, emit) {
+      app.get<ILogger>().logInfo(event.message);
+    });
+    on<_SendMessage>((event, emit) {
+      app.get<SocketService>().emit(
+        'message',
+        data: {
+          'message': event.message,
+          'to': state.currentUser.uid.getOrCrash()
+        },
+      );
+    });
+    app.get<SocketService>().on("message", (data) {
+      app.get<ILogger>().logInfo(data.toString());
+
+      add(_OnMessageReceieved(data['message']));
     });
   }
 

@@ -18,6 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.0
+  flutter_hooks: ^0.18.1
   flutter_signin_button: ^2.0.0
   freezed_annotation: ^1.0.0
   gap: ^2.0.0
