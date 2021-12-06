@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:telleo/domain/core/services/logger.dart';
+import 'package:telleo/utils/dependencies.dart';
 import '../../../domain/core/async_value.dart';
 
 import '../../../domain/user/user_entity.dart';
@@ -25,11 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         data: (data) {
           add(_RequestUserCheck(user: data.data));
         },
-        loading: (_) => add(
-          _RequestUserCheck(
-            user: none(),
-          ),
-        ),
+        loading: (_) {},
         error: (_) => add(
           _RequestUserCheck(
             user: none(),
@@ -40,6 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     appBloc.add(const AppEvent.updateUser());
     on<_RequestUserCheck>((event, emit) async {
       final user = event.user;
+
       user.fold(() => emit(const AuthState.unauthenticated()),
           (a) => emit(const AuthState.authenticated()));
     });
