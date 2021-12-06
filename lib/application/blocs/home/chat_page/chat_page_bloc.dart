@@ -25,10 +25,10 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     });
     on<_SendMessage>((event, emit) {
       app.get<SocketService>().emit(
-        'message',
+        'send-message',
         data: {
           'message': event.message,
-          'to': state.currentUser.uid.getOrCrash()
+          'to': state.chat.contact.uid.getOrCrash()
         },
       );
     });
