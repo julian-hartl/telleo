@@ -51,8 +51,8 @@ class AuthFormBloc extends Bloc<AuthFormEvent, AuthFormState> {
       await _performAuthAction(
         emit,
         (email, password) => authRepository.signInWithEmailAndPassword(
-          email: email.getOrCrash(),
-          password: password.getOrCrash(),
+          email: email,
+          password: password,
         ),
       );
     });

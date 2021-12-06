@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/config.dart';
-import 'package:telleo/domain/auth/auth_failure.dart';
-import 'package:telleo/domain/core/gateways/api_gateway.dart';
-import 'package:telleo/domain/core/gateways/local_storage.dart';
-import 'package:telleo/domain/core/services/logger.dart';
-import 'package:telleo/domain/core/services/token_service/token_service.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../config.dart';
+import '../../domain/auth/auth_failure.dart';
+import '../../domain/core/gateways/api_gateway.dart';
+import '../../domain/core/gateways/local_storage.dart';
+import '../../domain/core/services/logger.dart';
+import '../../domain/core/services/token_service/token_service.dart';
+import '../../utils/dependencies.dart';
 
 import '../../domain/core/services/api_service/api_failure.dart';
 import '../../domain/core/services/api_service/api_service.dart';
@@ -40,6 +40,8 @@ class TelleoApiService implements ApiService {
         return const ApiFailure.invalidEmail();
       case 204:
         return const ApiFailure.invalidPassword();
+      case 206:
+        return const ApiFailure.invalidRefreshToken();
       case 300:
         return const ApiFailure.userNotFound();
       default:
@@ -47,13 +49,13 @@ class TelleoApiService implements ApiService {
     }
   }
 
-  bool validateReponse(int code) {
+  bool isAccessTokenExpired(int code) {
     if (code == 205) {
       //accessToken is expired
       app.get<ILogger>().logError('Access token expired.');
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
 
   @override
@@ -64,19 +66,26 @@ class TelleoApiService implements ApiService {
   }
 
   Future<void> refreshAccessToken() async {
+    app.get<ILogger>().logInfo('Refresing access token.');
+
     final refreshToken = await tokenService.getRefreshToken();
     final response = await post(
       path: '/auth/v${Config.authVersion}/token',
       data: {'refreshToken': refreshToken},
     );
-    response.fold((failure) {
-      failure.maybeWhen(orElse: () {
+
+    await response.fold((failure) async {
+      failure.maybeWhen(invalidRefreshToken: () {
+        app.get<ILogger>().logError('Invalid Refresh Token.');
+      }, orElse: () {
         app.get<ILogger>().logError('Uncaught failure.');
-        throw Error();
       });
     }, (json) async {
       final accessToken = json['accessToken'] as String;
       await tokenService.storeAccessToken(accessToken);
+      app.get<ILogger>().logInfo('Got new access token.');
+
+      app.get<ILogger>().logInfo(accessToken);
     });
   }
 
@@ -92,18 +101,26 @@ class TelleoApiService implements ApiService {
         'authorization': 'BEARER $accessToken'
       },
     );
+    app.get<ILogger>().logInfo(response.toString());
+
     final error = response['error'];
     if (error != null) {
       if (error as bool) {
         final code = response['code'] as int;
-        if (validateReponse(code)) {
+        if (isAccessTokenExpired(code)) {
+          await refreshAccessToken();
+          app.get<ILogger>().logInfo('Waiting 5 seconds before next request.');
+
+          await Future.delayed(const Duration(seconds: 5));
+          return await get(path: path);
+          return left(const ApiFailure.internalServerError());
+        } else {
           return left(
             getFailureFromCode(code),
           );
-        } else {
-          await refreshAccessToken();
-          return await get(path: path);
         }
+      } else {
+        return right(response);
       }
     }
     return right(response);
@@ -121,18 +138,26 @@ class TelleoApiService implements ApiService {
           'authorization': 'BEARER $accessToken'
         },
         body: data);
+    app.get<ILogger>().logInfo(response.toString());
+
     final error = response['error'];
     if (error != null) {
       if (error as bool) {
         final code = response['code'] as int;
-        if (validateReponse(code)) {
+        if (isAccessTokenExpired(code)) {
+          await refreshAccessToken();
+          app.get<ILogger>().logInfo('Waiting 5 seconds before next request.');
+
+          await Future.delayed(const Duration(seconds: 5));
+          return await post(path: path, data: data);
+          return left(const ApiFailure.internalServerError());
+        } else {
           return left(
             getFailureFromCode(code),
           );
-        } else {
-          await refreshAccessToken();
-          return await post(path: path, data: data);
         }
+      } else {
+        return right(response);
       }
     }
     return right(response);

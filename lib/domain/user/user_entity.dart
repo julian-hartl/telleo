@@ -9,7 +9,7 @@ class UserEntity extends Entity {
   final Name name;
   final UniqueId uid;
   final EmailAdress email;
-  final Option<ProfilePictureUrl> profilePictureUrl;
+  final ProfilePictureUrl profilePictureUrl;
   UserEntity({
     required this.name,
     required this.uid,

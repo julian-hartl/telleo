@@ -1,12 +1,12 @@
 import 'package:injectable/injectable.dart';
-import 'package:telleo/application/blocs/app/bloc/app_bloc.dart';
-import 'package:telleo/config.dart';
-import 'package:telleo/data/models/user_model.dart';
-import 'package:telleo/domain/core/async_value.dart';
-import 'package:telleo/domain/core/gateways/local_storage.dart';
-import 'package:telleo/domain/core/services/logger.dart';
-import 'package:telleo/domain/core/services/token_service/token_service.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../application/blocs/app/bloc/app_bloc.dart';
+import '../../config.dart';
+import '../models/user_model.dart';
+import '../../domain/core/async_value.dart';
+import '../../domain/core/gateways/local_storage.dart';
+import '../../domain/core/services/logger.dart';
+import '../../domain/core/services/token_service/token_service.dart';
+import '../../utils/dependencies.dart';
 import '../../domain/core/services/api_service/api_service.dart';
 import '../../domain/core/value_objects.dart';
 import '../../domain/auth/auth_failure.dart';
@@ -25,10 +25,10 @@ class TelleoAuthRepository implements AuthRepository {
 
   @override
   Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword(
-      {required String email, required String password}) async {
+      {required EmailAdress email, required Password password}) async {
     final response = await apiService.post(
         path: '/auth/v${Config.authVersion}/signin',
-        data: {'email': email, 'password': password});
+        data: {'email': email.getOrCrash(), 'password': password.getOrCrash()});
     return await response.fold((failure) async {
       return failure.maybeWhen(emailNotFound: () {
         return left(const AuthFailure.invalidEmailPasswordCombination());
@@ -38,7 +38,7 @@ class TelleoAuthRepository implements AuthRepository {
         return left(const AuthFailure.serverError());
       }, orElse: () {
         app.get<ILogger>().logError('Uncaught failure.');
-        throw Error();
+        return left(const AuthFailure.serverError());
       });
     }, (json) async {
       final user = UserModel.fromJson(json['user']);
@@ -86,7 +86,7 @@ class TelleoAuthRepository implements AuthRepository {
         return left(const AuthFailure.serverError());
       }, orElse: () {
         app.get<ILogger>().logError('Uncaught failure.');
-        throw Error();
+        return left(const AuthFailure.serverError());
       });
     }, (json) async {
       final user = UserModel.fromJson(json['user']);

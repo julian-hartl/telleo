@@ -18,7 +18,7 @@ final darkTheme = ThemeData.from(
     primary: accentColor,
     secondary: secondaryAccentColor,
     onPrimary: onAccent,
-    onSecondary: onAccent,
+    onSecondary: onSecondary,
     primaryVariant: darkerAccentColor,
   ),
   textTheme: const TextTheme(

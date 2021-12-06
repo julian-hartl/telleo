@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/core/gateways/local_storage.dart';
-import 'package:telleo/domain/core/services/token_service/token_service.dart';
+import '../../domain/core/gateways/local_storage.dart';
+import '../../domain/core/services/token_service/token_service.dart';
 
 @LazySingleton(as: TokenService)
 class TelleoTokenService implements TokenService {

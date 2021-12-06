@@ -1,9 +1,11 @@
+import 'message_entity.dart';
+
 import '../core/base/entity.dart';
 import '../user/user_entity.dart';
 
 class ChatEntity extends Entity {
   final UserEntity contact;
-  final List<String> messages;
+  final List<MessageEntity> messages;
 
   ChatEntity({
     required this.contact,

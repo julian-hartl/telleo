@@ -1,8 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:telleo/domain/core/dartz_option_ext.dart';
-import 'package:telleo/domain/core/services/api_service/api_service.dart';
+import 'package:telleo/application/blocs/home/chat_page/chat_page_bloc.dart';
+import '../../../domain/core/dartz_option_ext.dart';
+import '../../../domain/core/services/api_service/api_service.dart';
+import '../../routing/router.dart';
 import '../../../domain/core/services/logger.dart';
 import '../../constants/colors.dart';
 import '../../constants/padding.dart';
@@ -39,15 +42,18 @@ class ChatsPage extends StatelessWidget {
                         child: CircleAvatar(
                           radius: profilePictureRadius,
                           foregroundImage: NetworkImage(
-                            value.data.profilePictureUrl
-                                .getOrCrash()
-                                .getOrCrash(),
+                            value.data.profilePictureUrl.value.fold(
+                                (_) =>
+                                    'https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png',
+                                (a) => a),
                           ),
                           child: const CircularProgressIndicator(),
                         ),
                       ),
                       loading: (_) => const CircularProgressIndicator(),
-                      error: (_) => throw Error(),
+                      error: (_) {
+                        return Text('!');
+                      },
                     ),
                   )
                 ],
@@ -60,8 +66,16 @@ class ChatsPage extends StatelessWidget {
                       return ListView.builder(
                         shrinkWrap: true,
                         itemBuilder: (context, index) => ChatItem(
-                          chat: chats[index],
-                        ),
+                            chat: chats[index],
+                            onTap: () {
+                              AutoRouter.of(context).push(
+                                ChatPageRoute(
+                                  bloc: ChatPageBloc(
+                                    chat: chats[index],
+                                  ),
+                                ),
+                              );
+                            }),
                         itemCount: chats.length,
                       );
                     },
@@ -85,10 +99,6 @@ class ChatsPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  state.test.map(
-                      data: (data) => Text(data.data),
-                      loading: (_) => const CircularProgressIndicator(),
-                      error: (_) => Container())
                 ],
               ),
             );
@@ -101,7 +111,9 @@ class ChatsPage extends StatelessWidget {
 
 class ChatItem extends StatelessWidget {
   final ChatEntity chat;
-  const ChatItem({Key? key, required this.chat}) : super(key: key);
+  final VoidCallback onTap;
+  const ChatItem({Key? key, required this.chat, required this.onTap})
+      : super(key: key);
 
   static const profilePictureRadius = 30.0;
 
@@ -109,7 +121,7 @@ class ChatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final contact = chat.contact;
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         padding: pagePadding,
         decoration: const BoxDecoration(
@@ -122,7 +134,10 @@ class ChatItem extends StatelessWidget {
             CircleAvatar(
               radius: profilePictureRadius,
               foregroundImage: NetworkImage(
-                contact.profilePictureUrl.getOrCrash().getOrCrash(),
+                contact.profilePictureUrl.getOrElse(
+                  (failure) =>
+                      'https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png',
+                ),
               ),
               child: const CircularProgressIndicator(),
             ),
@@ -135,7 +150,9 @@ class ChatItem extends StatelessWidget {
                   contact.name.getOrCrash(),
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                Text(chat.messages.isNotEmpty ? chat.messages.first : ''),
+                Text(chat.messages.isNotEmpty
+                    ? chat.messages.first.content
+                    : ''),
               ],
             ),
           ],

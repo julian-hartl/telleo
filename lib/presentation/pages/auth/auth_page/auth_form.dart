@@ -1,5 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../routing/router.dart';
+import '../../../utils/show_snackbar.dart';
 import '../../../../application/blocs/auth/auth_form/auth_form_bloc.dart';
 
 import '../../../../domain/core/services/logger.dart';
@@ -26,7 +29,7 @@ class AuthForm extends StatelessWidget {
             listener: (context, state) {
               state.authFailureOrSuccess.fold(
                 () {},
-                (either) {
+                (failureOrSuccess) {
                   /*
                   either.fold(
                     (failure) => app.get<ILogger>().logInfo(
@@ -40,6 +43,23 @@ class AuthForm extends StatelessWidget {
                         ),
                     (r) => null)
                   */
+                  failureOrSuccess.fold((failure) {
+                    showErrorSnackbar(
+                      context,
+                      message: failure.when(
+                        serverError: () => 'Server error occurred.',
+                        cancelledByUser: () => 'Cancelled.',
+                        invalidEmailPasswordCombination: () =>
+                            'Invalid email password combination.',
+                        emailAlreadyInUse: () => 'Email already in use.',
+                        invalidEmail: () => 'Invalid email.',
+                        invalidPassword: () => 'Invalid password.',
+                        localStorageError: () => 'Please sign in.',
+                      ),
+                    );
+                  }, (_) {
+                    AutoRouter.of(context).replace(const HomePageRoute());
+                  });
                 },
               );
             },

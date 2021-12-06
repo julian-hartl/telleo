@@ -26,7 +26,7 @@ class UserModel with _$UserModel {
       name: Name(name),
       uid: UniqueId.fromExistingUid(uid),
       email: EmailAdress(email),
-      profilePictureUrl: some(ProfilePictureUrl(profilePictureUrl)),
+      profilePictureUrl: ProfilePictureUrl(profilePictureUrl),
     );
   }
 
@@ -35,7 +35,8 @@ class UserModel with _$UserModel {
       name: entity.name.getOrCrash(),
       uid: entity.uid.getOrCrash(),
       email: entity.email.getOrCrash(),
-      profilePictureUrl: entity.profilePictureUrl.getOrCrash().getOrCrash(),
+      profilePictureUrl:
+          entity.profilePictureUrl.value.fold((l) => '', (r) => r),
     );
   }
 }

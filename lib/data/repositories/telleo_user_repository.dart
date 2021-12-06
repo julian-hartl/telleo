@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/config.dart';
-import 'package:telleo/data/models/user_model.dart';
-import 'package:telleo/domain/core/services/api_service/api_service.dart';
-import 'package:telleo/domain/core/services/logger.dart';
-import 'package:telleo/domain/core/services/token_service/token_service.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../config.dart';
+import '../models/user_model.dart';
+import '../../domain/core/services/api_service/api_service.dart';
+import '../../domain/core/services/logger.dart';
+import '../../domain/core/services/token_service/token_service.dart';
+import '../../utils/dependencies.dart';
 import '../data_sets.dart';
 import '../../domain/core/value_objects.dart';
 import '../../domain/user/user_failures.dart';
@@ -34,7 +34,7 @@ class TelleoUserRepository implements UserRepository {
         return right(none());
       }, orElse: () {
         app.get<ILogger>().logError('Uncaught failure.');
-        throw Error();
+        return left(const UserFailure.serverError());
       });
     }, (json) {
       final user = UserModel.fromJson(json['user']);

@@ -1,9 +1,10 @@
 import 'package:injectable/injectable.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:telleo/config.dart';
-import 'package:telleo/domain/core/services/logger.dart';
-import 'package:telleo/domain/core/services/socket_service/socket_service.dart';
-import 'package:telleo/utils/dependencies.dart';
+import 'package:telleo/domain/user/user_state.dart';
+import '../../config.dart';
+import '../../domain/core/services/logger.dart';
+import '../../domain/core/services/socket_service/socket_service.dart';
+import '../../utils/dependencies.dart';
 
 @LazySingleton(as: SocketService)
 class TelleoSocketService implements SocketService {
@@ -13,14 +14,21 @@ class TelleoSocketService implements SocketService {
 
   @override
   void emit(String event, {Map<String, dynamic>? data}) {
-    if (!isConnected) throw Error();
+    if (!isConnected) {
+      app.get<ILogger>().logError('Socket is not connected yet.');
+      throw Error();
+    }
 
     socket.emit(event, data);
   }
 
   @override
   void on(String event, void Function(Map<String, dynamic> data) handler) {
-    if (!isConnected) throw Error();
+    if (!isConnected) {
+      app.get<ILogger>().logError('Socket is not connected yet.');
+      throw Error();
+    }
+
     socket.on(event, (data) {
       handler(data);
     });
@@ -37,6 +45,11 @@ class TelleoSocketService implements SocketService {
             ['websocket'],
           )
           .disableAutoConnect()
+          .setQuery(
+            {
+              'uid': app.get<UserState>().getOrCrash().uid.getOrCrash(),
+            },
+          )
           .build(),
     );
     app.get<ILogger>().logInfo('Connecting socket...');

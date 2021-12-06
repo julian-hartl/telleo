@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/core/gateways/api_gateway.dart';
+import '../../domain/core/gateways/api_gateway.dart';
 
 @LazySingleton(as: ApiGateway)
 class TelleoApiGateway implements ApiGateway {

@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:telleo/domain/core/gateways/local_storage.dart';
+import '../../domain/core/gateways/local_storage.dart';
 
 @LazySingleton(as: LocalStorage)
 class TelleoSharedPreferences implements LocalStorage {
