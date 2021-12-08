@@ -25,7 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AppBloc appBloc;
   final UserRepository userRepository;
 
-  static const accessTokenExpiryDuration = Duration(minutes: 1);
+  static const accessTokenExpiryDuration = Duration(minutes: 15);
 
   AuthBloc(this.appBloc, this.tokenService, this.userRepository,
       this.tokenRefreshService)

@@ -26,84 +26,52 @@ class ChatsPage extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           ChatsPageBloc(app.get<AppBloc>(), app.get<ApiService>()),
-      child: Scaffold(
-        body: BlocBuilder<ChatsPageBloc, ChatsPageState>(
-          builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Telleo'),
-                actions: [
-                  Padding(
-                    padding: pagePadding,
-                    child: state.user.map(
-                      data: (value) => InkWell(
-                        customBorder: const CircleBorder(),
-                        onTap: () {},
-                        child: CircleAvatar(
-                          radius: profilePictureRadius,
-                          foregroundImage: NetworkImage(
-                            value.data.profilePictureUrl.value.fold(
-                                (_) =>
-                                    'https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png',
-                                (a) => a),
-                          ),
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ),
-                      loading: (_) => const CircularProgressIndicator(),
-                      error: (_) {
-                        return Text('!');
+      child: BlocBuilder<ChatsPageBloc, ChatsPageState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              state.chats.map(
+                data: (data) {
+                  final chats = data.data;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => ChatItem(
+                        chat: chats[index],
+                        onTap: () {
+                          AutoRouter.of(context).push(
+                            ChatPageRoute(
+                              bloc: ChatPageBloc(
+                                chat: chats[index],
+                              ),
+                            ),
+                          );
+                        }),
+                    itemCount: chats.length,
+                  );
+                },
+                loading: (_) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                error: (err) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(err.message),
+                    const Gap(10),
+                    TelleoTextButton(
+                      text: 'Retry',
+                      onPressed: () {
+                        context
+                            .read<ChatsPageBloc>()
+                            .add(const ChatsPageEvent.retry());
                       },
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
-              body: Column(
-                children: [
-                  state.chats.map(
-                    data: (data) {
-                      final chats = data.data;
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => ChatItem(
-                            chat: chats[index],
-                            onTap: () {
-                              AutoRouter.of(context).push(
-                                ChatPageRoute(
-                                  bloc: ChatPageBloc(
-                                    chat: chats[index],
-                                  ),
-                                ),
-                              );
-                            }),
-                        itemCount: chats.length,
-                      );
-                    },
-                    loading: (_) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    error: (err) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(err.message),
-                        const Gap(10),
-                        TelleoTextButton(
-                          text: 'Retry',
-                          onPressed: () {
-                            context
-                                .read<ChatsPageBloc>()
-                                .add(const ChatsPageEvent.retry());
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+            ],
+          );
+        },
       ),
     );
   }
