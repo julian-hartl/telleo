@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/core/dartz_option_ext.dart';
+import '../../domain/core/dartz_option_ext.dart';
 
 import '../../domain/core/async_value.dart';
 import '../../domain/user/user_entity.dart';

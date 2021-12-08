@@ -4,8 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/core/services/logger.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../../domain/core/services/logger.dart';
+import '../../../domain/core/services/token_service/token_refresh_service.dart';
+import '../../../domain/core/services/token_service/token_service.dart';
+import '../../../domain/user/user_repository.dart';
+import '../../../utils/dependencies.dart';
 import '../../../domain/core/async_value.dart';
 
 import '../../../domain/user/user_entity.dart';
@@ -17,30 +20,18 @@ part 'auth_state.dart';
 
 @lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final TokenService tokenService;
+  final TokenRefreshService tokenRefreshService;
   final AppBloc appBloc;
-  @visibleForTesting
-  late final StreamSubscription<AppState> appStateStream;
+  final UserRepository userRepository;
 
-  AuthBloc(this.appBloc) : super(const _Loading()) {
-    appStateStream = appBloc.stream.listen((event) {
-      event.user.map(
-        data: (data) {
-          add(_RequestUserCheck(user: data.data));
-        },
-        loading: (_) {},
-        error: (_) => add(
-          _RequestUserCheck(
-            user: none(),
-          ),
-        ),
-      );
-    });
-    appBloc.add(const AppEvent.updateUser());
-    on<_RequestUserCheck>((event, emit) async {
-      final user = event.user;
+  static const accessTokenExpiryDuration = Duration(minutes: 1);
 
-      user.fold(() => emit(const AuthState.unauthenticated()),
-          (a) => emit(const AuthState.authenticated()));
+  AuthBloc(this.appBloc, this.tokenService, this.userRepository,
+      this.tokenRefreshService)
+      : super(const _Loading()) {
+    on<_SignIn>((event, emit) async {
+      await _signIn(emit);
     });
     on<_SignOut>((event, emit) {
       appBloc.add(AppEvent.updateUser(user: AsyncValue.data(none())));
@@ -48,9 +39,45 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
   }
 
-  @override
-  Future<void> close() {
-    appStateStream.cancel();
-    return super.close();
+  void _scheduleNextAccessTokenRefresh() {
+    // TODO: add some extra validation so that it is only refresh when the current refresh token is not null
+    Future.delayed(accessTokenExpiryDuration, () async {
+      await tokenRefreshService.refreshAccessToken();
+      _scheduleNextAccessTokenRefresh();
+    });
+  }
+
+  Future<void> _signIn(Emitter emit) async {
+    final refreshToken = await tokenService.getRefreshToken();
+    if (refreshToken != null) {
+      await tokenRefreshService.refreshAccessToken();
+      final accessToken = await tokenService.getAccessToken();
+      if (accessToken != null) {
+        _scheduleNextAccessTokenRefresh();
+
+        final userResult = await userRepository.getCurrentUser();
+        app.get<ILogger>().logInfo(userResult.toString());
+        userResult.fold((failure) {
+          appBloc.add(
+            AppEvent.updateUser(
+              user: AsyncValue.error(
+                failure.map(
+                    serverError: (_) => 'Server error occurred.',
+                    noConnection: (_) => 'Please check your connection.'),
+              ),
+            ),
+          );
+          emit(const AuthState.unauthenticated());
+        }, (userOption) {
+          userOption.fold(() {
+            appBloc.add(AppEvent.updateUser(user: AsyncValue.data(none())));
+            emit(const AuthState.unauthenticated());
+          }, (user) {
+            appBloc.add(AppEvent.updateUser(user: AsyncValue.data(some(user))));
+            emit(const AuthState.authenticated());
+          });
+        });
+      }
+    }
   }
 }

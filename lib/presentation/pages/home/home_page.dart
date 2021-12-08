@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:telleo/domain/core/services/socket_service/socket_service.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../../domain/core/services/socket_service/socket_service.dart';
+import '../../../utils/dependencies.dart';
 
 import 'chats_page.dart';
 

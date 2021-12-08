@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:telleo/application/blocs/home/chat_page/chat_page_bloc.dart';
+import '../../application/blocs/home/chat_page/chat_page_bloc.dart';
 import '../../domain/chats/chat_entity.dart';
 import '../pages/home/chat_page.dart';
 

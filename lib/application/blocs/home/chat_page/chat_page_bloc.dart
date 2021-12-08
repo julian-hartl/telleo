@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:telleo/application/blocs/home/chats_page/chats_page_bloc.dart';
-import 'package:telleo/domain/chats/chat_entity.dart';
-import 'package:telleo/domain/core/services/logger.dart';
-import 'package:telleo/domain/core/services/socket_service/socket_service.dart';
-import 'package:telleo/domain/user/user_entity.dart';
-import 'package:telleo/domain/user/user_state.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../chats_page/chats_page_bloc.dart';
+import '../../../../domain/chats/chat_entity.dart';
+import '../../../../domain/core/services/logger.dart';
+import '../../../../domain/core/services/socket_service/socket_service.dart';
+import '../../../../domain/user/user_entity.dart';
+import '../../../../domain/user/user_state.dart';
+import '../../../../utils/dependencies.dart';
 
 part 'chat_page_event.dart';
 part 'chat_page_state.dart';

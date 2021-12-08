@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/chats/message_entity.dart';
-import 'package:telleo/domain/user/user_state.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../domain/chats/message_entity.dart';
+import '../../domain/user/user_state.dart';
+import '../../utils/dependencies.dart';
 import '../data_sets.dart';
 import '../../domain/user/user_entity.dart';
 import '../../domain/chats/chats_failures.dart';

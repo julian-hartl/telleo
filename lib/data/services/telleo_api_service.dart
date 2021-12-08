@@ -1,15 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+
 import '../../config.dart';
-import '../../domain/auth/auth_failure.dart';
 import '../../domain/core/gateways/api_gateway.dart';
-import '../../domain/core/gateways/local_storage.dart';
+import '../../domain/core/services/api_service/api_failure.dart';
+import '../../domain/core/services/api_service/api_service.dart';
 import '../../domain/core/services/logger.dart';
 import '../../domain/core/services/token_service/token_service.dart';
 import '../../utils/dependencies.dart';
-
-import '../../domain/core/services/api_service/api_failure.dart';
-import '../../domain/core/services/api_service/api_service.dart';
 
 @LazySingleton(as: ApiService)
 class TelleoApiService implements ApiService {
@@ -19,7 +17,7 @@ class TelleoApiService implements ApiService {
   final TokenService tokenService;
 
   String getEndpoint(String relPath) {
-    return Config.apiUrl + relPath;
+    return Config.backendUrl + relPath;
   }
 
   ApiFailure getFailureFromCode(int code) {
@@ -40,6 +38,8 @@ class TelleoApiService implements ApiService {
         return const ApiFailure.invalidEmail();
       case 204:
         return const ApiFailure.invalidPassword();
+      case 205:
+        return const ApiFailure.tokenExpired();
       case 206:
         return const ApiFailure.invalidRefreshToken();
       case 300:
@@ -49,44 +49,11 @@ class TelleoApiService implements ApiService {
     }
   }
 
-  bool isAccessTokenExpired(int code) {
-    if (code == 205) {
-      //accessToken is expired
-      app.get<ILogger>().logError('Access token expired.');
-      return true;
-    }
-    return false;
-  }
-
   @override
   Future<Either<ApiFailure, Map<String, dynamic>>> delete(
       {required String path, Map<String, dynamic>? data}) {
     // TODO: implement delete
     throw UnimplementedError();
-  }
-
-  Future<void> refreshAccessToken() async {
-    app.get<ILogger>().logInfo('Refresing access token.');
-
-    final refreshToken = await tokenService.getRefreshToken();
-    final response = await post(
-      path: '/auth/v${Config.authVersion}/token',
-      data: {'refreshToken': refreshToken},
-    );
-
-    await response.fold((failure) async {
-      failure.maybeWhen(invalidRefreshToken: () {
-        app.get<ILogger>().logError('Invalid Refresh Token.');
-      }, orElse: () {
-        app.get<ILogger>().logError('Uncaught failure.');
-      });
-    }, (json) async {
-      final accessToken = json['accessToken'] as String;
-      await tokenService.storeAccessToken(accessToken);
-      app.get<ILogger>().logInfo('Got new access token.');
-
-      app.get<ILogger>().logInfo(accessToken);
-    });
   }
 
   @override
@@ -101,21 +68,15 @@ class TelleoApiService implements ApiService {
         'authorization': 'BEARER $accessToken'
       },
     );
-    app.get<ILogger>().logInfo(response.toString());
+    app.get<ILogger>().logInfo('Backend call responded\n$response');
 
     final error = response['error'];
     if (error != null) {
       if (error as bool) {
         final code = response['code'] as int;
-        if (isAccessTokenExpired(code)) {
-          await refreshAccessToken();
-          // return await get(path: path);
-          return left(const ApiFailure.internalServerError());
-        } else {
-          return left(
-            getFailureFromCode(code),
-          );
-        }
+        return left(
+          getFailureFromCode(code),
+        );
       } else {
         return right(response);
       }
@@ -135,22 +96,15 @@ class TelleoApiService implements ApiService {
           'authorization': 'BEARER $accessToken'
         },
         body: data);
-    app.get<ILogger>().logInfo(response.toString());
+    app.get<ILogger>().logInfo('Backend call responded\n$response');
 
     final error = response['error'];
     if (error != null) {
       if (error as bool) {
         final code = response['code'] as int;
-        if (isAccessTokenExpired(code)) {
-          await refreshAccessToken();
-
-          // return await post(path: path, data: data);
-          return left(const ApiFailure.internalServerError());
-        } else {
-          return left(
-            getFailureFromCode(code),
-          );
-        }
+        return left(
+          getFailureFromCode(code),
+        );
       } else {
         return right(response);
       }

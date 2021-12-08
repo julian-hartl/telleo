@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
-import 'package:telleo/application/blocs/home/chat_page/chat_page_bloc.dart';
-import 'package:telleo/domain/chats/message_entity.dart';
-import 'package:telleo/domain/user/user_state.dart';
-import 'package:telleo/presentation/constants/padding.dart';
-import 'package:telleo/utils/dependencies.dart';
+import '../../../application/blocs/home/chat_page/chat_page_bloc.dart';
+import '../../../domain/chats/message_entity.dart';
+import '../../../domain/user/user_state.dart';
+import '../../constants/padding.dart';
+import '../../../utils/dependencies.dart';
 import '../../../domain/chats/chat_entity.dart';
 import '../../constants/decorations.dart';
 

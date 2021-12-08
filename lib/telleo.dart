@@ -23,11 +23,11 @@ class Telleo extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => app.get<AuthBloc>(),
+          create: (context) =>
+              app.get<AuthBloc>()..add(const AuthEvent.signIn()),
         ),
         BlocProvider(
-          create: (context) =>
-              app.get<AppBloc>()..add(const AppEvent.updateUser()),
+          create: (context) => app.get<AppBloc>(),
         )
       ],
       child: MaterialApp.router(

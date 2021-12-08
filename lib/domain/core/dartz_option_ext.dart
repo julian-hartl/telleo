@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'services/logger.dart';
+
 import '../../utils/dependencies.dart';
+import 'services/logger.dart';
 
 extension DartzOptionExt<T> on Option<T> {
   T getOrCrash() => fold(

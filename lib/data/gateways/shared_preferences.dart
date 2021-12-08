@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../domain/core/gateways/local_storage.dart';
 
 @LazySingleton(as: LocalStorage)

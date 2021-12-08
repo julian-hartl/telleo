@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:telleo/domain/user/user_state.dart';
+import '../../domain/user/user_state.dart';
 import '../../config.dart';
 import '../../domain/core/services/logger.dart';
 import '../../domain/core/services/socket_service/socket_service.dart';
@@ -39,7 +39,7 @@ class TelleoSocketService implements SocketService {
   @override
   void connect() {
     socket = io(
-      Config.apiUrl,
+      Config.backendUrl,
       OptionBuilder()
           .setTransports(
             ['websocket'],

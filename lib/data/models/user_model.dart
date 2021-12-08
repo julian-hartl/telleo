@@ -1,9 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../domain/core/value_objects.dart';
 import '../../domain/user/user_entity.dart';
-import '../../domain/core/dartz_option_ext.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';

@@ -167,6 +167,7 @@ class AuthForm extends StatelessWidget {
                               .read<AuthFormBloc>()
                               .add(const AuthFormEvent.signIn());
                         },
+                        isLoading: state.isSubmitting,
                       ),
                       const Gap(10),
                       TelleoTextButton(
@@ -177,6 +178,7 @@ class AuthForm extends StatelessWidget {
                               .add(const AuthFormEvent.signUp());
                         },
                         buttonTheme: TelloTextButtonTheme.reversed,
+                        isLoading: state.isSubmitting,
                       ),
                     ],
                   ),

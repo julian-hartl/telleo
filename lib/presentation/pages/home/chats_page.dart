@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:telleo/application/blocs/home/chat_page/chat_page_bloc.dart';
+import '../../../application/blocs/home/chat_page/chat_page_bloc.dart';
 import '../../../domain/core/dartz_option_ext.dart';
 import '../../../domain/core/services/api_service/api_service.dart';
 import '../../routing/router.dart';
