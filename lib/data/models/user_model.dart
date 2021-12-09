@@ -1,23 +1,32 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import '../../domain/core/value_objects.dart';
 import '../../domain/user/user_entity.dart';
 
-part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
-@freezed
-class UserModel with _$UserModel {
-  const factory UserModel({
-    required String name,
-    required String uid,
-    required String email,
-    required String profilePictureUrl,
-  }) = _UserModel;
+@JsonSerializable()
+class UserModel {
+  @JsonKey(defaultValue: 'Name lol')
+  final String name;
+
+  final String uid;
+  final String email;
+
+  @JsonKey(
+      defaultValue:
+          'https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png')
+  final String profilePictureUrl;
+
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
-  const UserModel._();
+  const UserModel({
+    required this.name,
+    required this.email,
+    required this.profilePictureUrl,
+    required this.uid,
+  });
 
   UserEntity toEntity() {
     return UserEntity(

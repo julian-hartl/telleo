@@ -41,4 +41,50 @@ class TelleoUserRepository implements UserRepository {
       return right(some(user.toEntity()));
     });
   }
+
+  Future<Either<UserFailure, List<UserEntity>>> getAllUsers() async {
+    final response =
+        await apiService.get(path: '/api/v${Config.apiVersion}/users');
+    return await response.fold((failure) {
+      return failure.maybeWhen(internalServerError: () {
+        return left(const UserFailure.serverError());
+      }, orElse: () {
+        app.get<ILogger>().logError('Uncaught failure.');
+        return left(const UserFailure.serverError());
+      });
+    }, (json) {
+      final users = (json['users'] as List)
+          .map((user) => UserModel.fromJson(json).toEntity())
+          .toList();
+      return right(users);
+    });
+  }
+
+  @override
+  Future<Either<UserFailure, List<UserEntity>>> searchUsers(
+      {String? query}) async {
+    final accessToken = await tokenService.getAccessToken();
+    if (accessToken == null) {
+      return right([]);
+    }
+    if (query != null) {
+      final response = await apiService.get(
+          path: '/api/v${Config.apiVersion}/users/search/$query');
+      return await response.fold((failure) {
+        return failure.maybeWhen(internalServerError: () {
+          return left(const UserFailure.serverError());
+        }, orElse: () {
+          app.get<ILogger>().logError('Uncaught failure.');
+          return left(const UserFailure.serverError());
+        });
+      }, (json) {
+        final users = (json['users'] as List)
+            .map((user) => UserModel.fromJson(user).toEntity())
+            .toList();
+        return right(users);
+      });
+    } else {
+      return await getAllUsers();
+    }
+  }
 }

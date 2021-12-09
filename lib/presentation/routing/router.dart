@@ -14,13 +14,22 @@ part 'router.gr.dart';
 @MaterialAutoRouter(
   routes: <AutoRoute>[
     CustomRoute(
-        page: WelcomePage, transitionsBuilder: TransitionsBuilders.fadeIn),
+      page: WelcomePage,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
     AutoRoute(page: SplashPage, initial: true),
     CustomRoute(
-        page: AuthPage, transitionsBuilder: TransitionsBuilders.slideLeft),
-    CustomRoute(page: HomePage, transitionsBuilder: TransitionsBuilders.fadeIn),
+      page: AuthPage,
+      transitionsBuilder: TransitionsBuilders.slideLeft,
+    ),
     CustomRoute(
-        page: ChatPage, transitionsBuilder: TransitionsBuilders.slideLeft),
+      page: HomePage,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: ChatPage,
+      transitionsBuilder: TransitionsBuilders.slideLeft,
+    ),
   ],
   preferRelativeImports: true,
 )

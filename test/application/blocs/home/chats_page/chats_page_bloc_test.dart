@@ -29,15 +29,15 @@ void main() {
 
     test('initial state should be [expectedInitial]', () {
       final expectedInitial = ChatsPageState(
-          chats: const AsyncValue.loading(),
-          user: appBloc.state.user.map(
-            data: (data) => AsyncValue.data(
-              data.data.getOrCrash(),
-            ),
-            loading: (l) => const AsyncValue.loading(),
-            error: (err) => AsyncValue.error(err.message),
+        chats: const AsyncValue.loading(),
+        user: appBloc.state.user.map(
+          data: (data) => AsyncValue.data(
+            data.data.getOrCrash(),
           ),
-          test: const AsyncValue.loading());
+          loading: (l) => const AsyncValue.loading(),
+          error: (err) => AsyncValue.error(err.message),
+        ),
+      );
 
       expect(sut.state, expectedInitial);
     });
