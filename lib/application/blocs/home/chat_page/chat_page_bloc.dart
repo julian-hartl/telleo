@@ -26,10 +26,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     on<_SendMessage>((event, emit) {
       app.get<SocketService>().emit(
         'send-message',
-        data: {
-          'message': event.message,
-          'to': state.chat.contact.uid.getOrCrash()
-        },
+        data: {'message': event.message, 'to': state.chat.contact.uid},
       );
     });
     app.get<SocketService>().on("message", (data) {
@@ -39,7 +36,7 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
     });
   }
 
-  bool currentUserIsSender(UniqueId senderUid) {
-    return state.currentUser.uid.getOrCrash() == senderUid.getOrCrash();
+  bool currentUserIsSender(String senderUid) {
+    return state.currentUser.uid == senderUid;
   }
 }

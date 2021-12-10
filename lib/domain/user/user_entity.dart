@@ -6,10 +6,10 @@ import '../core/value_objects.dart';
 export '../core/value_objects.dart';
 
 class UserEntity extends Entity {
-  final Name name;
-  final UniqueId uid;
-  final EmailAdress email;
-  final ProfilePictureUrl profilePictureUrl;
+  final String name;
+  final String uid;
+  final String email;
+  final String profilePictureUrl;
   UserEntity({
     required this.name,
     required this.uid,

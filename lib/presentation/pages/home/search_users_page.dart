@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:telleo/application/blocs/home/search_users_page/search_users_bloc.dart';
+import 'package:telleo/domain/user/user_entity.dart';
 import 'package:telleo/domain/user/user_repository.dart';
 import 'package:telleo/utils/dependencies.dart';
 
@@ -19,24 +20,7 @@ class SearchUsersPage extends StatelessWidget {
                 ? ListView.builder(
                     itemBuilder: (context, index) {
                       final user = users[index];
-                      return Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(user.email.getOrCrash()),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(8.0),
-                              ),
-                              child: const Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                      );
+                      return _SearchUserResultTile(user: user);
                     },
                     itemCount: users.length,
                   )
@@ -58,6 +42,46 @@ class SearchUsersPage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _SearchUserResultTile extends StatelessWidget {
+  const _SearchUserResultTile({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
+
+  final UserEntity user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: const BoxDecoration(shape: BoxShape.circle),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CircleAvatar(
+            foregroundImage: NetworkImage(user.profilePictureUrl),
+          ),
+          Text(user.email),
+          ElevatedButton(
+            onPressed: () {
+              context.read<SearchUsersBloc>().add(
+                    SearchUsersEvent.createChat(
+                      withId: user.uid,
+                    ),
+                  );
+            },
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(8.0),
+            ),
+            child: const Icon(Icons.add),
+          ),
+        ],
+      ),
     );
   }
 }

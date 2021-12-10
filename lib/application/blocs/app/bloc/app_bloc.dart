@@ -29,6 +29,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     this.userRepository,
     this.chatsRepository,
   ) : super(AppState.initial()) {
+    on<_AddChat>((event, emit) {
+      state.chats.map(
+          data: (data) {
+            final chats = data.data;
+            emit(
+                state.copyWith(chats: AsyncValue.data(chats..add(event.chat))));
+          },
+          loading: (_) {},
+          error: (_) {});
+    });
     on<_UpdateUser>((event, emit) async {
       emit(state.copyWith(user: const AsyncValue.loading()));
       final user = event.user;

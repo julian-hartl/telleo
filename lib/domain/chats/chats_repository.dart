@@ -4,4 +4,5 @@ import 'chat_entity.dart';
 
 abstract class ChatsRepository {
   Future<Either<ChatsFailure, List<ChatEntity>>> getChats();
+  Future<Either<ChatsFailure, ChatEntity>> createChat(String withId);
 }

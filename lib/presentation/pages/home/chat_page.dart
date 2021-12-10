@@ -43,17 +43,13 @@ class ChatPage extends HookWidget {
                 children: [
                   CircleAvatar(
                     radius: profilePictureRadius,
-                    foregroundImage: NetworkImage(
-                      state.chat.contact.profilePictureUrl.getOrElse(
-                        (failure) =>
-                            'https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png',
-                      ),
-                    ),
+                    foregroundImage:
+                        NetworkImage(state.chat.contact.profilePictureUrl),
                     child: const CircularProgressIndicator(),
                   ),
                   const Gap(10),
                   Text(
-                    state.chat.contact.name.value.fold((l) => 'Name', (r) => r),
+                    state.chat.contact.name,
                   ),
                 ],
               ),
@@ -64,13 +60,11 @@ class ChatPage extends HookWidget {
                   child: ListView.builder(
                     itemBuilder: (context, index) {
                       final message = state.chat.messages[index];
-                      final isSender =
-                          bloc.currentUserIsSender(message.sender.uid);
+                      final isSender = bloc.currentUserIsSender(message.sender);
                       final lastMessage =
                           index > 0 ? state.chat.messages[index - 1] : null;
                       final padding = lastMessage != null
-                          ? (lastMessage.sender.uid.getOrCrash() ==
-                                  message.sender.uid.getOrCrash()
+                          ? (lastMessage.sender == message.sender
                               ? smallMessagePadding
                               : normalMessagePadding)
                           : normalMessagePadding;

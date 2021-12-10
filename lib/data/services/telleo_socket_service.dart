@@ -47,7 +47,7 @@ class TelleoSocketService implements SocketService {
           .disableAutoConnect()
           .setQuery(
             {
-              'uid': app.get<UserState>().getOrCrash().uid.getOrCrash(),
+              'uid': app.get<UserState>().getOrCrash().uid,
             },
           )
           .build(),

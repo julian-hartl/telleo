@@ -21,8 +21,11 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
             error: (err) => AsyncValue.error(err.message),
           ),
         )) {
-    on<HomePageEvent>((event, emit) {
-      // TODO: implement event handler
+    on<_StartedSearching>((event, emit) {
+      emit(state.copyWith(isSearching: true));
+    });
+    on<_StoppedSearching>((event, emit) {
+      emit(state.copyWith(isSearching: false));
     });
   }
 }

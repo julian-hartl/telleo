@@ -12,5 +12,5 @@ final testUser = const UserModel(
 final testChats = [
   ChatEntity(
       contact: testUser,
-      messages: [MessageEntity(sender: testUser, content: '')])
+      messages: [MessageEntity(sender: testUser.uid, content: '')])
 ];

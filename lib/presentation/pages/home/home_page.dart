@@ -38,9 +38,6 @@ class _HomePageState extends State<HomePage> {
     pageViewController.dispose();
   }
 
-  static const profilePictureRadius = 20.0;
-  bool isSearching = false;
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -52,27 +49,37 @@ class _HomePageState extends State<HomePage> {
           create: (context) => HomePageBloc(app.get<AppBloc>()),
         ),
       ],
-      child: BlocConsumer<HomePageBloc, HomePageState>(
-        listener: (context, state) {},
-        builder: (context, homeState) {
-          return BlocBuilder<SearchUsersBloc, SearchUsersState>(
-            builder: (context, searchState) {
-              return Scaffold(
-                appBar: isSearching
-                    ? _searchAppBar(context)
-                    : _chatsAppBar(homeState),
-                body: SwitchPage(
-                  currentPage: searchState.showSearch ? 1 : 0,
-                  pages: const [
-                    ChatsPage(),
-                    SearchUsersPage(),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-      ),
+      child: const HomePageBody(),
+    );
+  }
+}
+
+class HomePageBody extends StatelessWidget {
+  const HomePageBody({Key? key}) : super(key: key);
+  static const profilePictureRadius = 20.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<HomePageBloc, HomePageState>(
+      listener: (context, state) {},
+      builder: (context, homeState) {
+        return BlocBuilder<SearchUsersBloc, SearchUsersState>(
+          builder: (context, searchState) {
+            return Scaffold(
+              appBar: homeState.isSearching
+                  ? _searchAppBar(context)
+                  : _chatsAppBar(homeState, context),
+              body: SwitchPage(
+                currentPage: searchState.showSearch ? 1 : 0,
+                pages: const [
+                  ChatsPage(),
+                  SearchUsersPage(),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -80,17 +87,28 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
       title: Row(
         children: [
+          IconButton(
+            onPressed: () {
+              context
+                  .read<HomePageBloc>()
+                  .add(const HomePageEvent.stoppedSearching());
+              context
+                  .read<SearchUsersBloc>()
+                  .add(const SearchUsersEvent.clearQuery());
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
           Expanded(
             child: Container(
               height: 60,
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 onEditingComplete: () {
-                  setState(() {
-                    isSearching = false;
-                  });
+                  context
+                      .read<HomePageBloc>()
+                      .add(const HomePageEvent.stoppedSearching());
                   context.read<SearchUsersBloc>().add(
-                        const SearchUsersEvent.onQueryChanged(query: ''),
+                        const SearchUsersEvent.clearQuery(),
                       );
                 },
                 autofocus: true,
@@ -112,15 +130,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  AppBar _chatsAppBar(HomePageState state) {
+  AppBar _chatsAppBar(HomePageState state, BuildContext homeContext) {
     return AppBar(
       title: const Text('Telleo'),
       actions: [
         IconButton(
             onPressed: () {
-              setState(() {
-                isSearching = true;
-              });
+              homeContext
+                  .read<HomePageBloc>()
+                  .add(const HomePageEvent.startedSearching());
             },
             icon: const Icon(Icons.search)),
         Padding(
@@ -131,12 +149,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {},
               child: CircleAvatar(
                 radius: profilePictureRadius,
-                foregroundImage: NetworkImage(
-                  value.data.profilePictureUrl.value.getOrElse(
-                    () =>
-                        'https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png',
-                  ),
-                ),
+                foregroundImage: NetworkImage(value.data.profilePictureUrl),
                 child: const CircularProgressIndicator(),
               ),
             ),

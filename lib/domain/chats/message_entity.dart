@@ -2,7 +2,7 @@ import '../core/base/entity.dart';
 import '../user/user_entity.dart';
 
 class MessageEntity extends Entity {
-  final UserEntity sender;
+  final String sender;
   final String content;
 
   MessageEntity({

@@ -101,12 +101,7 @@ class ChatItem extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: profilePictureRadius,
-              foregroundImage: NetworkImage(
-                contact.profilePictureUrl.getOrElse(
-                  (failure) =>
-                      'https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png',
-                ),
-              ),
+              foregroundImage: NetworkImage(contact.profilePictureUrl),
               child: const CircularProgressIndicator(),
             ),
             const Gap(10),
@@ -115,7 +110,7 @@ class ChatItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  contact.name.getOrCrash(),
+                  contact.name,
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Text(chat.messages.isNotEmpty

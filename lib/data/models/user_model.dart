@@ -1,49 +1,55 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:telleo/domain/core/value_validators.dart';
 
-import '../../domain/core/value_objects.dart';
 import '../../domain/user/user_entity.dart';
 
 part 'user_model.g.dart';
 
 @JsonSerializable()
 class UserModel {
-  @JsonKey(defaultValue: 'Name lol')
+  static const defaultProfilePictureUrl =
+      'https://gepa-mbh.de/wp-content/uploads/2019/01/blank-profile-picture-973460-300x300.png';
+
+  static const defaultName = 'user';
+
+  @JsonKey(defaultValue: defaultName)
   final String name;
 
   final String uid;
   final String email;
 
-  @JsonKey(
-      defaultValue:
-          'https://www.senertec.de/wp-content/uploads/2020/04/blank-profile-picture-973460_1280.png')
+  @JsonKey(defaultValue: defaultProfilePictureUrl)
   final String profilePictureUrl;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
-  const UserModel({
-    required this.name,
+  UserModel({
+    required String name,
     required this.email,
-    required this.profilePictureUrl,
+    required String profilePictureUrl,
     required this.uid,
-  });
+  })  : profilePictureUrl = validateUrl(profilePictureUrl)
+            .fold((l) => defaultProfilePictureUrl, (r) => r),
+        name = validateName(name).fold((l) => defaultName, (r) => r);
+
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   UserEntity toEntity() {
     return UserEntity(
-      name: Name(name),
-      uid: UniqueId.fromExistingUid(uid),
-      email: EmailAdress(email),
-      profilePictureUrl: ProfilePictureUrl(profilePictureUrl),
+      name: name,
+      uid: uid,
+      email: email,
+      profilePictureUrl: profilePictureUrl,
     );
   }
 
   factory UserModel.fromEntity(UserEntity entity) {
     return UserModel(
-      name: entity.name.getOrCrash(),
-      uid: entity.uid.getOrCrash(),
-      email: entity.email.getOrCrash(),
-      profilePictureUrl:
-          entity.profilePictureUrl.value.fold((l) => '', (r) => r),
+      name: entity.name,
+      uid: entity.uid,
+      email: entity.email,
+      profilePictureUrl: entity.profilePictureUrl,
     );
   }
 }
