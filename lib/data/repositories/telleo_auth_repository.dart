@@ -1,30 +1,26 @@
+import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import '../../application/blocs/app/bloc/app_bloc.dart';
+
 import '../../config.dart';
-import '../models/user_model.dart';
-import '../../domain/core/async_value.dart';
-import '../../domain/core/gateways/local_storage.dart';
+import '../../domain/auth/auth_failure.dart';
+import '../../domain/auth/auth_repository.dart';
+import '../../domain/core/services/api_service/api_service.dart';
 import '../../domain/core/services/logger.dart';
 import '../../domain/core/services/token_service/token_service.dart';
-import '../../utils/dependencies.dart';
-import '../../domain/core/services/api_service/api_service.dart';
 import '../../domain/core/value_objects.dart';
-import '../../domain/auth/auth_failure.dart';
-import 'package:dartz/dartz.dart';
-import '../../domain/auth/auth_repository.dart';
-
-import '../../domain/user/user_state.dart';
+import '../../domain/user/user_entity.dart';
+import '../../utils/dependencies.dart';
+import '../models/user_model.dart';
 
 @LazySingleton(as: AuthRepository)
 class TelleoAuthRepository implements AuthRepository {
-  final UserState userState;
   final ApiService apiService;
   final TokenService tokenService;
 
-  TelleoAuthRepository(this.userState, this.apiService, this.tokenService);
+  TelleoAuthRepository(this.apiService, this.tokenService);
 
   @override
-  Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword(
+  Future<Either<AuthFailure, UserEntity>> signInWithEmailAndPassword(
       {required EmailAdress email, required Password password}) async {
     final response = await apiService.post(
         path: '/auth/v${Config.authVersion}/signin',
@@ -51,26 +47,18 @@ class TelleoAuthRepository implements AuthRepository {
       if (!storedRefreshToken || !storedAccessToken) {
         return left(const AuthFailure.localStorageError());
       }
-      app.get<AppBloc>().add(
-            AppEvent.updateUser(
-              user: AsyncValue.data(
-                some(
-                  user.toEntity(),
-                ),
-              ),
-            ),
-          );
-      return right(unit);
+
+      return right(user.toEntity());
     });
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> signInWithGoogle() async {
+  Future<Either<AuthFailure, UserEntity>> signInWithGoogle() async {
     return left(const AuthFailure.serverError());
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> signUpWithEmailAndPassword(
+  Future<Either<AuthFailure, UserEntity>> signUpWithEmailAndPassword(
       {required EmailAdress email, required Password password}) async {
     final response = await apiService.post(
         path: '/auth/v${Config.authVersion}/signup',
@@ -99,16 +87,8 @@ class TelleoAuthRepository implements AuthRepository {
       if (!storedRefreshToken || !storedAccessToken) {
         return left(const AuthFailure.localStorageError());
       }
-      app.get<AppBloc>().add(
-            AppEvent.updateUser(
-              user: AsyncValue.data(
-                some(
-                  user.toEntity(),
-                ),
-              ),
-            ),
-          );
-      return right(unit);
+
+      return right(user.toEntity());
     });
   }
 }

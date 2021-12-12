@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
+import 'package:telleo/application/blocs/app/user/loader/user_bloc.dart';
 import '../../../application/blocs/home/chat_page/chat_page_bloc.dart';
 import '../../../domain/chats/message_entity.dart';
-import '../../../domain/user/user_state.dart';
 import '../../constants/padding.dart';
 import '../../../utils/dependencies.dart';
 import '../../../domain/chats/chat_entity.dart';
@@ -12,8 +12,10 @@ import '../../constants/decorations.dart';
 
 class ChatPage extends HookWidget {
   final ChatPageBloc bloc;
+  final ChatEntity chat;
 
-  const ChatPage({Key? key, required this.bloc}) : super(key: key);
+  const ChatPage({Key? key, required this.bloc, required this.chat})
+      : super(key: key);
   static const profilePictureRadius = 20.0;
 
   static final smallMessagePadding = EdgeInsets.only(
@@ -32,9 +34,7 @@ class ChatPage extends HookWidget {
     final TextEditingController messageController = useTextEditingController();
 
     return BlocConsumer<ChatPageBloc, ChatPageState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+      listener: (context, state) {},
       bloc: bloc,
       builder: (context, state) {
         return Scaffold(
@@ -44,64 +44,95 @@ class ChatPage extends HookWidget {
                   CircleAvatar(
                     radius: profilePictureRadius,
                     foregroundImage:
-                        NetworkImage(state.chat.contact.profilePictureUrl),
+                        NetworkImage(chat.contact.profilePictureUrl),
                     child: const CircularProgressIndicator(),
                   ),
                   const Gap(10),
                   Text(
-                    state.chat.contact.name,
+                    chat.contact.email
+                        .replaceRange(10, chat.contact.email.length, '...'),
                   ),
                 ],
               ),
             ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      final message = state.chat.messages[index];
-                      final isSender = bloc.currentUserIsSender(message.sender);
-                      final lastMessage =
-                          index > 0 ? state.chat.messages[index - 1] : null;
-                      final padding = lastMessage != null
-                          ? (lastMessage.sender == message.sender
-                              ? smallMessagePadding
-                              : normalMessagePadding)
-                          : normalMessagePadding;
-                      return Padding(
-                        padding: padding,
-                        child:
-                            MessageTile(isSender: isSender, message: message),
-                      );
-                    },
-                    itemCount: state.chat.messages.length,
-                    shrinkWrap: true,
+            body: BlocBuilder<ChatPageBloc, ChatPageState>(
+              builder: (context, state) {
+                return state.map(
+                  loadingMessages: (_) => const Center(
+                    child: CircularProgressIndicator(),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: TextField(
-                        decoration: outlineInputDecoration(
-                          Theme.of(context),
-                          hint: 'Message',
+                  loadingSuccess: (success) {
+                    final messages = success.messages;
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              final message = messages[index];
+
+                              final lastMessage =
+                                  index > 0 ? messages[index - 1] : null;
+                              final padding = lastMessage != null
+                                  ? (lastMessage.sender == message.sender
+                                      ? smallMessagePadding
+                                      : normalMessagePadding)
+                                  : normalMessagePadding;
+                              return Padding(
+                                padding: padding,
+                                child: BlocBuilder<UserBloc, UserState>(
+                                  builder: (context, state) {
+                                    bool isSender;
+                                    isSender = state.maybeMap(
+                                        loadingSuccess: (success) =>
+                                            success.user.uid ==
+                                            chat.contact.uid,
+                                        orElse: () => throw Error());
+                                    return MessageTile(
+                                        isSender: isSender, message: message);
+                                  },
+                                ),
+                              );
+                            },
+                            itemCount: messages.size,
+                            shrinkWrap: true,
+                          ),
                         ),
-                        controller: messageController,
-                      )),
-                      IconButton(
-                          onPressed: () {
-                            bloc.add(
-                              ChatPageEvent.sendMessage(messageController.text),
-                            );
-                            messageController.clear();
-                          },
-                          icon: const Icon(Icons.send))
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: TextField(
+                                decoration: outlineInputDecoration(
+                                  Theme.of(context),
+                                  hint: 'Message',
+                                ),
+                                controller: messageController,
+                              )),
+                              IconButton(
+                                  onPressed: () {
+                                    bloc.add(
+                                      ChatPageEvent.sendMessage(
+                                          currentChat: chat,
+                                          message: messageController.text),
+                                    );
+                                    messageController.clear();
+                                  },
+                                  icon: const Icon(Icons.send))
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                  loadingFailure: (failure) => Center(
+                    child: Text(
+                      failure.message,
+                    ),
                   ),
-                )
-              ],
+                  initial: (_) => Container(),
+                );
+              },
             ));
       },
     );

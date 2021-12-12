@@ -10,7 +10,7 @@ abstract class AuthFormState with _$AuthFormState {
     required bool showErrorMessages,
 
     /// [authFailureOrSuccess] is none when theres neither a failure nor a success --> it contains a [AuthFailure] when something went wrong
-    required Option<Either<AuthFailure, Unit>> authFailureOrSuccess,
+    required Option<Either<AuthFailure, UserEntity>> authFailureOrSuccess,
   }) = _AuthState;
   factory AuthFormState.initial() => AuthFormState(
         showErrorMessages: false,

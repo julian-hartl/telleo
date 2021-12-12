@@ -1,17 +1,21 @@
-import 'message_entity.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../core/base/entity.dart';
 import '../user/user_entity.dart';
+import 'message_entity.dart';
 
-class ChatEntity extends Entity {
-  final UserEntity contact;
-  final List<MessageEntity> messages;
+part 'chat_entity.freezed.dart';
 
-  ChatEntity({
-    required this.contact,
-    required this.messages,
-  });
+@freezed
+class ChatEntity extends Entity with _$ChatEntity {
+  const ChatEntity._();
+
+  const factory ChatEntity({
+    required UserEntity contact,
+    required List<MessageEntity> messages,
+    required String id,
+  }) = _ChatEntity;
 
   @override
-  List<Object?> get props => [contact, messages];
+  List<Object?> get props => [contact, messages, id];
 }

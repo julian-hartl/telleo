@@ -19,4 +19,9 @@ class TelleoLogger implements ILogger {
   void logInfo(String info) {
     logger.i(info);
   }
+
+  @override
+  void logWarning(String warning) {
+    logger.w(warning);
+  }
 }

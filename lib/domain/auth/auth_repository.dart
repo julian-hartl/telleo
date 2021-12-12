@@ -1,17 +1,18 @@
 import 'package:dartz/dartz.dart';
+import '../user/user_entity.dart';
 
 import '../core/value_objects.dart';
 import 'auth_failure.dart';
 
 abstract class AuthRepository {
-  Future<Either<AuthFailure, Unit>> signUpWithEmailAndPassword({
+  Future<Either<AuthFailure, UserEntity>> signUpWithEmailAndPassword({
     required EmailAdress email,
     required Password password,
   });
-  Future<Either<AuthFailure, Unit>> signInWithEmailAndPassword({
+  Future<Either<AuthFailure, UserEntity>> signInWithEmailAndPassword({
     required EmailAdress email,
     required Password password,
   });
 
-  Future<Either<AuthFailure, Unit>> signInWithGoogle();
+  Future<Either<AuthFailure, UserEntity>> signInWithGoogle();
 }

@@ -9,14 +9,17 @@ class TelleoApiGateway implements ApiGateway {
   TelleoApiGateway(this.dio);
 
   @override
-  Future get({required String endpoint, Map<String, dynamic>? header}) async {
-    final response = await dio.get(
-      endpoint,
-      options: Options(
-        headers: header,
-        validateStatus: validateStatus,
-      ),
-    );
+  Future get({
+    required String endpoint,
+    Map<String, dynamic>? header,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    final response = await dio.get(endpoint,
+        options: Options(
+          headers: header,
+          validateStatus: validateStatus,
+        ),
+        queryParameters: queryParameters);
     return response.data;
   }
 

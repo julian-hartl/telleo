@@ -7,12 +7,13 @@ import '../../utils/dependencies.dart';
 
 import '../../config.dart';
 
-@LazySingleton(as: TokenRefreshService)
-class TelleoTokenRefreshService implements TokenRefreshService {
+@LazySingleton(as: RefreshTokenService)
+class TelleoTokenRefreshService implements RefreshTokenService {
   final ApiService apiService;
   final TokenService tokenService;
+  final ILogger logger;
 
-  TelleoTokenRefreshService(this.apiService, this.tokenService);
+  TelleoTokenRefreshService(this.apiService, this.tokenService, this.logger);
 
   @override
   Future<String?> refreshAccessToken() async {
@@ -35,6 +36,22 @@ class TelleoTokenRefreshService implements TokenRefreshService {
       final accessToken = json['accessToken'] as String;
       await tokenService.storeAccessToken(accessToken);
       return accessToken;
+    });
+  }
+
+  @override
+  Future<bool> validateRefreshToken() async {
+    final refreshToken = await tokenService.getRefreshToken();
+    final response = await apiService.get(
+        path: '${Config.apiPath}/tokens/verify',
+        queryParameters: {'refreshToken': refreshToken!});
+
+    return response.fold((failure) {
+      logger.logError(failure);
+      return false;
+    }, (json) {
+      final valid = json['valid'] as bool;
+      return valid;
     });
   }
 }

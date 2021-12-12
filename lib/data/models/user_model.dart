@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:telleo/domain/core/value_validators.dart';
+import '../../domain/core/value_validators.dart';
 
 import '../../domain/user/user_entity.dart';
 

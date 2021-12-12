@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../domain/core/async_value.dart';
+import '../../../../domain/user/user_entity.dart';
+import '../../../../utils/dependencies.dart';
 import '../../../../domain/auth/auth_failure.dart';
 import '../../../../domain/auth/auth_repository.dart';
 import '../../../../domain/core/value_objects.dart';
@@ -14,7 +17,7 @@ class AuthFormBloc extends Bloc<AuthFormEvent, AuthFormState> {
 
   Future<void> _performAuthAction(
       Emitter<AuthFormState> emit,
-      Future<Either<AuthFailure, Unit>> Function(
+      Future<Either<AuthFailure, UserEntity>> Function(
               EmailAdress email, Password password)
           authAction) async {
     emit(state.copyWith(

@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'domain/core/services/socket_service/socket_service.dart';
 
-import 'application/blocs/app/bloc/app_bloc.dart';
+import 'application/blocs/app/chat/actor/chat_actor_bloc.dart';
+import 'application/blocs/app/chat/loader/chat_bloc.dart';
+import 'application/blocs/app/user/actor/bloc/user_actor_bloc.dart';
+import 'application/blocs/app/user/loader/user_bloc.dart';
 import 'application/blocs/auth/auth_bloc.dart';
 import 'presentation/constants/themes.dart';
 import 'presentation/routing/router.dart';
@@ -27,8 +29,17 @@ class Telleo extends StatelessWidget {
               app.get<AuthBloc>()..add(const AuthEvent.signIn()),
         ),
         BlocProvider(
-          create: (context) => app.get<AppBloc>(),
-        )
+          create: (context) => app.get<UserBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => app.get<UserActorBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => app.get<ChatBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => app.get<ChatActorBloc>(),
+        ),
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',

@@ -1,3 +1,4 @@
-abstract class TokenRefreshService {
+abstract class RefreshTokenService {
   Future<String?> refreshAccessToken();
+  Future<bool> validateRefreshToken();
 }

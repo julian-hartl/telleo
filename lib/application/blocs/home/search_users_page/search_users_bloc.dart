@@ -1,66 +1,57 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/application/blocs/app/bloc/app_bloc.dart';
-import 'package:telleo/domain/chats/chat_entity.dart';
-import 'package:telleo/domain/chats/chats_repository.dart';
-import 'package:telleo/domain/chats/chats_state.dart';
-import 'package:telleo/domain/core/async_value.dart';
-import 'package:telleo/domain/user/user_entity.dart';
-import 'package:telleo/domain/user/user_repository.dart';
-import 'package:telleo/utils/dependencies.dart';
+import 'package:kt_dart/collection.dart';
+import 'package:telleo/application/blocs/app/chat/loader/chat_bloc.dart';
+import 'package:telleo/application/blocs/app/user/loader/user_bloc.dart';
 
+import '../../../../domain/chats/chat_entity.dart';
+import '../../../../domain/chats/chats_repository.dart';
+import '../../../../domain/core/async_value.dart';
+import '../../../../domain/user/user_entity.dart';
+import '../../../../domain/user/user_repository.dart';
+import '../../../../utils/dependencies.dart';
+
+part 'search_users_bloc.freezed.dart';
 part 'search_users_event.dart';
 part 'search_users_state.dart';
-part 'search_users_bloc.freezed.dart';
+
+@freezed
+class SearchResult with _$SearchResult {
+  const factory SearchResult({
+    required bool chatAlreadyExists,
+    required UserEntity user,
+  }) = _SearchResult;
+}
 
 @lazySingleton
 class SearchUsersBloc extends Bloc<SearchUsersEvent, SearchUsersState> {
   final UserRepository userRepository;
-  final ChatsRepository chatsRepository;
-  final AppBloc appBloc;
-  SearchUsersBloc(this.userRepository, this.chatsRepository, this.appBloc)
-      : super(SearchUsersState.initial()) {
-    on<_CreateChat>((event, emit) async {
-      final withId = event.withId;
-      final result = await chatsRepository.createChat(withId);
-      result.fold((failure) {}, (chat) {
-        appBloc.add(AppEvent.addChat(chat: chat));
-        add(const SearchUsersEvent.clearQuery());
-      });
-    });
-    on<_ClearQuery>((event, emit) {
-      emit(state.copyWith(
-          query: '', showSearch: false, users: const AsyncValue.data([])));
-    });
-    on<_OnQueryChanged>((event, emit) async {
+  final UserBloc userBloc;
+  final ChatBloc chatBloc;
+  SearchUsersBloc(this.userRepository, this.chatBloc, this.userBloc)
+      : super(const SearchUsersState.initial()) {
+    on<_QueryChanged>((event, emit) async {
       final query = event.query;
-      emit(state.copyWith(query: query, showSearch: query.isNotEmpty));
 
       if (query.isNotEmpty) {
-        emit(state.copyWith(users: const AsyncValue.loading()));
+        emit(const SearchUsersState.loadingResults());
         final searchResult = await userRepository.searchUsers(query: query);
-        searchResult.fold((failure) {
-          emit(
-            state.copyWith(
-              users: AsyncValue.error(
-                failure.map(
-                  serverError: (_) => 'Internal server error.',
-                  noConnection: (_) => 'Please check your connection.',
-                ),
-              ),
-            ),
-          );
-        }, (users) {
-          emit(state.copyWith(
-              users: AsyncValue.data(_removeAlreadyExistingChats(users))));
+        await searchResult.fold((failure) {
+          emit(const SearchUsersState.loadingFailure());
+        }, (users) async {
+          emit(SearchUsersState.loadingSuccessful(
+              (await _markAlreadyExistingChats(await _removeCurrentUser(users)))
+                  .toImmutableList()));
         });
+      } else {
+        emit(const SearchUsersState.loadingSuccessful(KtList.empty()));
       }
     });
   }
 
-  bool _hasChatWith(UserEntity contact, List<ChatEntity> chats) {
-    final uid = contact.uid;
+  bool _hasChatWith(UserEntity user, List<ChatEntity> chats) {
+    final uid = user.uid;
 
     for (var chat in chats) {
       if (chat.contact.uid == uid) {
@@ -70,14 +61,19 @@ class SearchUsersBloc extends Bloc<SearchUsersEvent, SearchUsersState> {
     return false;
   }
 
-  List<UserEntity> _removeAlreadyExistingChats(List<UserEntity> users) {
-    final result = app.get<ChatsState>().value.onData((chats) {
-      for (var chat in chats) {
-        users.removeWhere((user) => _hasChatWith(chat.contact, chats));
-      }
-      return users;
-    });
-    if (result != null) return result;
+  Future<List<SearchResult>> _markAlreadyExistingChats(
+      List<UserEntity> searchResult) async {
+    final chats = await chatBloc.getChats();
+    final results = searchResult
+        .map((e) => SearchResult(
+            chatAlreadyExists: _hasChatWith(e, chats.asList()), user: e))
+        .toList();
+    return results;
+  }
+
+  Future<List<UserEntity>> _removeCurrentUser(List<UserEntity> users) async {
+    final uid = (await userBloc.getCurrentUser()).uid;
+    users.removeWhere((user) => user.uid == uid);
     return users;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:telleo/domain/chats/message_entity.dart';
+import '../../domain/chats/message_entity.dart';
 
 part 'message_model.g.dart';
 

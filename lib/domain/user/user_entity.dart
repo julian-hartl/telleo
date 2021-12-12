@@ -1,7 +1,4 @@
-import 'package:dartz/dartz.dart';
-
 import '../core/base/entity.dart';
-import '../core/value_objects.dart';
 
 export '../core/value_objects.dart';
 
@@ -10,7 +7,7 @@ class UserEntity extends Entity {
   final String uid;
   final String email;
   final String profilePictureUrl;
-  UserEntity({
+  const UserEntity({
     required this.name,
     required this.uid,
     required this.email,

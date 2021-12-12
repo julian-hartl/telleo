@@ -1,5 +1,10 @@
 abstract class SocketService {
-  void on(String event, void Function(Map<String, dynamic> data) handler);
+  Future<UnregisterEventListener> registerEventListener(
+      String event, void Function(Map<String, dynamic> data) handler);
   void emit(String event, {Map<String, dynamic>? data});
-  void connect();
+  Future<void> connect();
 }
+
+typedef EventHandler = void Function(Map<String, dynamic> data);
+
+typedef UnregisterEventListener = void Function();

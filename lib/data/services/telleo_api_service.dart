@@ -11,10 +11,13 @@ import '../../utils/dependencies.dart';
 
 @LazySingleton(as: ApiService)
 class TelleoApiService implements ApiService {
-  TelleoApiService(this.apiGateway, this.tokenService);
+  TelleoApiService(this.apiGateway, this.tokenService, this.logger);
 
   final ApiGateway apiGateway;
   final TokenService tokenService;
+  final ILogger logger;
+
+  static const timeout = Duration(seconds: 10);
 
   String getEndpoint(String relPath) {
     return Config.backendUrl + relPath;
@@ -58,30 +61,37 @@ class TelleoApiService implements ApiService {
 
   @override
   Future<Either<ApiFailure, Map<String, dynamic>>> get(
-      {required String path}) async {
+      {required String path, Map<String, dynamic>? queryParameters}) async {
     final accessToken = await tokenService.getAccessToken();
 
-    final response = await apiGateway.get(
-      endpoint: getEndpoint(path),
-      header: {
-        'Content-Type': 'application/json',
-        'authorization': 'BEARER $accessToken'
-      },
-    );
-    app.get<ILogger>().logInfo('Backend call responded\n$response');
+    try {
+      final response = await apiGateway
+          .get(
+            endpoint: getEndpoint(path),
+            header: {
+              'Content-Type': 'application/json',
+              'authorization': 'BEARER $accessToken'
+            },
+            queryParameters: queryParameters,
+          )
+          .timeout(timeout);
+      logger.logInfo('Backend call responded\n$response');
 
-    final error = response['error'];
-    if (error != null) {
-      if (error as bool) {
-        final code = response['code'] as int;
-        return left(
-          getFailureFromCode(code),
-        );
-      } else {
-        return right(response);
+      final error = response['error'];
+      if (error != null) {
+        if (error as bool) {
+          final code = response['code'] as int;
+          return left(
+            getFailureFromCode(code),
+          );
+        } else {
+          return right(response);
+        }
       }
+      return right(response);
+    } catch (_) {
+      return left(const ApiFailure.noConnection());
     }
-    return right(response);
   }
 
   @override
@@ -89,27 +99,32 @@ class TelleoApiService implements ApiService {
       {required String path, required Map<String, dynamic> data}) async {
     final accessToken = await tokenService.getAccessToken();
 
-    final response = await apiGateway.post(
+    try {
+      final response = await apiGateway.post(
         endpoint: getEndpoint(path),
+        body: data,
         header: {
           'Content-Type': 'application/json',
           'authorization': 'BEARER $accessToken'
         },
-        body: data);
-    app.get<ILogger>().logInfo('Backend call responded\n$response');
+      ).timeout(timeout);
+      logger.logInfo('Backend call responded\n$response');
 
-    final error = response['error'];
-    if (error != null) {
-      if (error as bool) {
-        final code = response['code'] as int;
-        return left(
-          getFailureFromCode(code),
-        );
-      } else {
-        return right(response);
+      final error = response['error'];
+      if (error != null) {
+        if (error as bool) {
+          final code = response['code'] as int;
+          return left(
+            getFailureFromCode(code),
+          );
+        } else {
+          return right(response);
+        }
       }
+      return right(response);
+    } catch (_) {
+      return left(const ApiFailure.noConnection());
     }
-    return right(response);
   }
 
   @override

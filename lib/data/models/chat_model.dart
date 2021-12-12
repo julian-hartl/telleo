@@ -1,9 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:telleo/data/models/user_model.dart';
-import 'package:telleo/domain/chats/chat_entity.dart';
-import 'package:telleo/domain/user/user_entity.dart';
-import 'package:telleo/domain/user/user_state.dart';
-import 'package:telleo/utils/dependencies.dart';
+import 'package:kt_dart/kt.dart';
+import 'package:telleo/application/blocs/app/user/loader/user_bloc.dart';
+import 'user_model.dart';
+import '../../domain/chats/chat_entity.dart';
+import '../../domain/user/user_entity.dart';
+import '../../utils/dependencies.dart';
 
 import 'message_model.dart';
 
@@ -20,18 +21,19 @@ class ChatModel {
     required this.id,
   });
 
-  static List<ChatEntity> toEntities(List<ChatModel> chats) =>
-      chats.map((chat) => chat.toEntity()).toList();
+  static Future<List<ChatEntity>> toEntities(List<ChatModel> chats) async =>
+      Future.wait(chats.map((chat) async => await chat.toEntity()).toList());
 
-  UserEntity getContact() {
-    final contact = users
-        .firstWhere((user) => user.uid == app.get<UserState>().getOrCrash().uid)
-        .toEntity();
+  Future<UserEntity> getContact() async {
+    final uid = (await app.get<UserBloc>().getCurrentUser()).uid;
+    final contact = users.firstWhere((user) => user.uid != uid).toEntity();
     return contact;
   }
 
-  ChatEntity toEntity() => ChatEntity(
-      contact: getContact(), messages: MessageModel.toEntityList(messages));
+  Future<ChatEntity> toEntity() async => ChatEntity(
+      contact: await getContact(),
+      messages: MessageModel.toEntityList(messages),
+      id: id);
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>
       _$ChatModelFromJson(json);

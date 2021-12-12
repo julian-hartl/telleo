@@ -16,4 +16,5 @@ abstract class ApiFailure with _$ApiFailure {
   const factory ApiFailure.userNotFound() = _UserNotFound;
   const factory ApiFailure.unknownError() = _UnknownError;
   const factory ApiFailure.invalidRefreshToken() = _InvalidRefreshToken;
+  const factory ApiFailure.noConnection() = _NoConnection;
 }
