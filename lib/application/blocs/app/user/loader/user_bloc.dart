@@ -5,10 +5,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/domain/core/services/logger.dart';
-import 'package:telleo/domain/user/user_entity.dart';
-import 'package:telleo/domain/user/user_failures.dart';
-import 'package:telleo/domain/user/user_repository.dart';
+import '../../../../../domain/core/services/logger.dart';
+import '../../../../../domain/user/user_entity.dart';
+import '../../../../../domain/user/user_failures.dart';
+import '../../../../../domain/user/user_repository.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';

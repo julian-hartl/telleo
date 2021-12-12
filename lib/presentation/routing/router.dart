@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import '../../application/blocs/home/chat_page/chat_page_bloc.dart';
-import '../../domain/chats/chat_entity.dart';
-import '../pages/home/chat_page.dart';
 
+import '../../domain/chats/chat_entity.dart';
 import '../pages/auth/auth_page/auth_page.dart';
 import '../pages/auth/welcome_page.dart';
+import '../pages/home/chat_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/splash_page.dart';
 

@@ -10,4 +10,10 @@ abstract class ApiGateway {
     Map<String, dynamic>? header,
     Map<String, dynamic>? body,
   });
+
+  Future<dynamic> put({
+    required String endpoint,
+    Map<String, dynamic>? header,
+    Map<String, dynamic>? body,
+  });
 }

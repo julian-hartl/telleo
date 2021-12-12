@@ -6,23 +6,26 @@ import 'package:telleo/config.dart';
 import 'package:telleo/data/services/telleo_api_service.dart';
 import 'package:telleo/domain/core/gateways/api_gateway.dart';
 import 'package:telleo/domain/core/services/api_service/api_service.dart';
+import 'package:telleo/domain/core/services/logger.dart';
 import 'package:telleo/domain/core/services/token_service/token_service.dart';
 import 'package:telleo/utils/dependencies.dart';
 
 import 'api_service_test.mocks.dart';
 
-@GenerateMocks([ApiGateway, TokenService])
+@GenerateMocks([ApiGateway, TokenService, ILogger])
 void main() {
   late ApiService sut;
   late MockApiGateway apiGateway;
   late MockTokenService tokenService;
+  late MockILogger mockLogger;
   setUpAll(() {
     configureDependenices();
   });
   setUp(() {
     apiGateway = MockApiGateway();
     tokenService = MockTokenService();
-    sut = TelleoApiService(apiGateway, tokenService);
+    mockLogger = MockILogger();
+    sut = TelleoApiService(apiGateway, tokenService, mockLogger);
   });
   group('ApiService', () {
     group('POST', () {

@@ -4,8 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/application/blocs/app/chat/loader/chat_bloc.dart';
-import 'package:telleo/application/blocs/app/user/loader/user_bloc.dart';
+import '../../app/chat/loader/chat_bloc.dart';
+import '../../app/user/loader/user_bloc.dart';
 
 import '../../../../domain/chats/chat_entity.dart';
 import '../../../../domain/core/async_value.dart';

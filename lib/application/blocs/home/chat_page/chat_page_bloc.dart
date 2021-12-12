@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kt_dart/collection.dart';
-import 'package:telleo/application/blocs/app/user/loader/user_bloc.dart';
+import '../../app/user/loader/user_bloc.dart';
+import '../../failures/chat_failure_bloc.dart';
 
 import '../../../../domain/chats/chat_entity.dart';
 import '../../../../domain/chats/message_entity.dart';
@@ -31,7 +32,11 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
               ),
             );
         add(_UpdateMessages([..._currentMessages, message].toImmutableList()));
-      } catch (_) {}
+      } catch (_) {
+        app
+            .get<ChatFailureBloc>()
+            .add(const ChatFailureEvent.couldNotSendMessage());
+      }
     });
     on<_UpdateMessages>((event, emit) {
       _currentMessages = event.messages.toMutableList().asList();

@@ -1,15 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:telleo/application/blocs/app/chat/loader/chat_bloc.dart';
-import 'package:telleo/application/blocs/app/user/loader/user_bloc.dart';
-import 'package:telleo/application/socket_event_handlers/chat_event_handler.dart';
-import 'package:telleo/data/models/message_model.dart';
-import 'package:telleo/data/packets/message_packet.dart';
-import 'package:telleo/domain/chats/chat_entity.dart';
-import 'package:telleo/domain/chats/chats_repository.dart';
-import 'package:telleo/domain/chats/message_entity.dart';
-import 'package:telleo/domain/core/services/logger.dart';
+import '../loader/chat_bloc.dart';
+import '../../user/loader/user_bloc.dart';
+import '../../../failures/chat_failure_bloc.dart';
+import '../../../../socket_event_handlers/chat_event_handler.dart';
+import '../../../../../data/models/message_model.dart';
+import '../../../../../data/packets/message_packet.dart';
+import '../../../../../domain/chats/chat_entity.dart';
+import '../../../../../domain/chats/chats_repository.dart';
+import '../../../../../domain/chats/message_entity.dart';
+import '../../../../../domain/core/services/logger.dart';
 import 'package:kt_dart/collection.dart';
 
 part 'chat_actor_event.dart';
@@ -23,9 +24,10 @@ class ChatActorBloc extends Bloc<ChatActorEvent, ChatActorState> {
   final ChatEventHandler chatEventHandler;
   final UserBloc userBloc;
   final ChatsRepository chatsRepository;
+  final ChatFailureBloc chatFailureBloc;
 
   ChatActorBloc(this.log, this.chatBloc, this.chatEventHandler, this.userBloc,
-      this.chatsRepository)
+      this.chatsRepository, this.chatFailureBloc)
       : super(const ChatActorState.initial()) {
     on<_AddMessage>((event, emit) {
       final chat = event.chat;
@@ -53,7 +55,17 @@ class ChatActorBloc extends Bloc<ChatActorEvent, ChatActorState> {
         return chat;
       }).toImmutableList();
 
-      chatBloc.add(ChatEvent.updateChats(updatedChats));
+      final result = await chatsRepository.updateChat(chatToUpdate);
+
+      result.fold((failure) {
+        failure.map(
+            serverError: (_) =>
+                chatFailureBloc.add(const ChatFailureEvent.serverError()),
+            noConnection: (_) =>
+                chatFailureBloc.add(const ChatFailureEvent.noConnection()));
+      }, (_) {
+        chatBloc.add(ChatEvent.updateChats(updatedChats));
+      });
     });
   }
 }

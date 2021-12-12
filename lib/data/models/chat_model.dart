@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kt_dart/kt.dart';
-import 'package:telleo/application/blocs/app/user/loader/user_bloc.dart';
+import '../../application/blocs/app/user/loader/user_bloc.dart';
 import 'user_model.dart';
 import '../../domain/chats/chat_entity.dart';
 import '../../domain/user/user_entity.dart';
@@ -29,6 +29,15 @@ class ChatModel {
     final contact = users.firstWhere((user) => user.uid != uid).toEntity();
     return contact;
   }
+
+  static Future<ChatModel> fromEntity(ChatEntity entity) async => ChatModel(
+        users: [
+          UserModel.fromEntity(entity.contact),
+          UserModel.fromEntity(await app.get<UserBloc>().getCurrentUser())
+        ],
+        messages: MessageModel.fromEntityList(entity.messages),
+        id: entity.id,
+      );
 
   Future<ChatEntity> toEntity() async => ChatEntity(
       contact: await getContact(),

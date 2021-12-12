@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:telleo/data/packets/message_packet.dart';
-import 'package:telleo/domain/core/services/socket_service/socket_service.dart';
+import '../../data/packets/message_packet.dart';
+import '../../domain/core/services/socket_service/socket_service.dart';
 
 @lazySingleton
 class ChatEventHandler {

@@ -42,4 +42,20 @@ class TelleoApiGateway implements ApiGateway {
     );
     return response.data;
   }
+
+  @override
+  Future put(
+      {required String endpoint,
+      Map<String, dynamic>? header,
+      Map<String, dynamic>? body}) async {
+    final response = await dio.put(
+      endpoint,
+      options: Options(
+        headers: header,
+        validateStatus: validateStatus,
+      ),
+      data: body,
+    );
+    return response.data;
+  }
 }

@@ -129,8 +129,34 @@ class TelleoApiService implements ApiService {
 
   @override
   Future<Either<ApiFailure, Map<String, dynamic>>> update(
-      {required String path, required Map<String, dynamic> data}) {
-    // TODO: implement update
-    throw UnimplementedError();
+      {required String path, required Map<String, dynamic> data}) async {
+    final accessToken = await tokenService.getAccessToken();
+
+    try {
+      final response = await apiGateway.put(
+        endpoint: getEndpoint(path),
+        body: data,
+        header: {
+          'Content-Type': 'application/json',
+          'authorization': 'BEARER $accessToken'
+        },
+      ).timeout(timeout);
+      logger.logInfo('Backend call responded\n$response');
+
+      final error = response['error'];
+      if (error != null) {
+        if (error as bool) {
+          final code = response['code'] as int;
+          return left(
+            getFailureFromCode(code),
+          );
+        } else {
+          return right(response);
+        }
+      }
+      return right(response);
+    } catch (_) {
+      return left(const ApiFailure.noConnection());
+    }
   }
 }

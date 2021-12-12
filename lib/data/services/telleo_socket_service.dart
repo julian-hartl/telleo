@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:telleo/application/blocs/app/user/loader/user_bloc.dart';
+import '../../application/blocs/app/user/loader/user_bloc.dart';
 
 import '../../config.dart';
 import '../../domain/core/services/logger.dart';
@@ -30,7 +30,7 @@ class TelleoSocketService implements SocketService {
   bool isConnected = false;
   bool isConnecting = false;
 
-  final Completer<void> _completer = Completer();
+  Completer<void> _completer = Completer();
 
   @override
   Future<void> connect() async {
@@ -60,7 +60,13 @@ class TelleoSocketService implements SocketService {
       socket.onConnect((data) {
         app.get<ILogger>().logInfo('Connected socket!');
         isConnected = true;
-        _completer.complete();
+        if (!_completer.isCompleted) {
+          _completer.complete();
+        }
+      });
+      socket.onDisconnect((_) {
+        isConnected = false;
+        _completer = Completer();
       });
       socket.onError((data) {
         app.get<ILogger>().logError(data);

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import '../../domain/core/value_validators.dart';
 
+import '../../domain/core/value_validators.dart';
 import '../../domain/user/user_entity.dart';
 
 part 'user_model.g.dart';

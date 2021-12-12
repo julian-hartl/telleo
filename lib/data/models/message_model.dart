@@ -15,6 +15,12 @@ class MessageModel {
   static List<MessageEntity> toEntityList(List<MessageModel> messages) =>
       messages.map((e) => e.toEntity()).toList();
 
+  static List<MessageModel> fromEntityList(List<MessageEntity> messages) =>
+      messages.map((message) => fromEntity(message)).toList();
+
+  static MessageModel fromEntity(MessageEntity entity) =>
+      MessageModel(content: entity.content, sender: entity.sender);
+
   MessageEntity toEntity() => MessageEntity(sender: sender, content: content);
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>

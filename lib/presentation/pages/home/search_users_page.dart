@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:telleo/application/blocs/app/chat/actor/chat_actor_bloc.dart';
+import '../../../application/blocs/app/chat/actor/chat_actor_bloc.dart';
 import '../../../application/blocs/home/search_users_page/search_users_bloc.dart';
 import '../../../domain/user/user_entity.dart';
 import '../../../domain/user/user_repository.dart';

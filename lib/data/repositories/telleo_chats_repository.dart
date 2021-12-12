@@ -47,4 +47,18 @@ class TelleoChatsRepository implements ChatsRepository {
       return right(await ChatModel.fromJson(json['chat']).toEntity());
     });
   }
+
+  @override
+  Future<Either<ChatsFailure, ChatEntity>> updateChat(ChatEntity chat) async {
+    final response = await apiService.update(
+        data: {'chat': (await ChatModel.fromEntity(chat)).toJson()},
+        path: '${Config.apiPath}/chats/update');
+    return response.fold((failure) {
+      return left(
+          failure.maybeWhen(orElse: () => const ChatsFailure.serverError()));
+    }, (json) async {
+      final updatedChat = await ChatModel.fromJson(json['chat']).toEntity();
+      return right(updatedChat);
+    });
+  }
 }

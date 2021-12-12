@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../models/message_model.dart';
 
 part 'message_packet.freezed.dart';
