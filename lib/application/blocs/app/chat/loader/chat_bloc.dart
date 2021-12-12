@@ -24,15 +24,19 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (state is _LoadingSuccess) {
       return (state as _LoadingSuccess).chats;
     }
-    Future.delayed(const Duration(seconds: 10),
-        () => throw ErrorHint('Getting chats timeout.'));
-    log.logWarning('Accessing current user when it is not loaded yet.');
     final Completer<KtList<ChatEntity>> completer = Completer();
+
+    Future.delayed(const Duration(seconds: 10), () {
+      if (!completer.isCompleted) {
+        throw ErrorHint('Getting chats timeout.');
+      }
+    });
+
     StreamSubscription? sub;
     sub = stream.listen((state) {
       if (state is _LoadingSuccess) {
-        sub?.cancel();
         completer.complete(state.chats);
+        sub?.cancel();
       }
     });
     return completer.future;

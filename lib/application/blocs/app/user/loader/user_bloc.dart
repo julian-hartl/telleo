@@ -21,20 +21,29 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   Future<UserEntity> getCurrentUser() async {
     if (state is _LoadingSuccess) {
-      return (state as _LoadingSuccess).user;
+      final user = (state as _LoadingSuccess).user;
+
+      return user;
+    } else {
+      final Completer<UserEntity> completer = Completer();
+
+      Future.delayed(const Duration(seconds: 10), () {
+        if (!completer.isCompleted) {
+          throw ErrorHint('Getting user timeout.');
+        }
+      });
+      StreamSubscription? sub;
+
+      sub = stream.listen((state) {
+        if (state is _LoadingSuccess) {
+          final user = state.user;
+
+          completer.complete(user);
+          sub?.cancel();
+        }
+      });
+      return completer.future;
     }
-    Future.delayed(const Duration(seconds: 10),
-        () => throw ErrorHint('Getting user timeout.'));
-    log.logWarning('Accessing current user when it is not loaded yet.');
-    final Completer<UserEntity> completer = Completer();
-    StreamSubscription? sub;
-    sub = stream.listen((state) {
-      if (state is _LoadingSuccess) {
-        sub?.cancel();
-        completer.complete(state.user);
-      }
-    });
-    return completer.future;
   }
 
   UserBloc(this.userRepository, this.log) : super(const UserState.initial()) {

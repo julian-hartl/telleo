@@ -22,47 +22,48 @@ class ChatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
-        return Container();
+        return state.map(
+          initial: (_) => Container(),
+          loadInProgress: (_) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          loadingSuccess: (success) {
+            final chats = success.chats;
+            return ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, index) => ChatItem(
+                  chat: chats[index],
+                  onTap: () {
+                    AutoRouter.of(context).push(
+                      ChatPageRoute(
+                        chat: chats[index],
+                      ),
+                    );
+                  }),
+              itemCount: chats.size,
+            );
+          },
+          loadingFailure: (failure) => Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Whoops, something went wrong...'),
+              const Gap(10),
+              TelleoTextButton(
+                text: 'Retry',
+                onPressed: () {
+                  context
+                      .read<ChatsPageBloc>()
+                      .add(const ChatsPageEvent.retry());
+                },
+              ),
+            ],
+          ),
+        );
       },
     );
   }
 }
-
-/*
-Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(err.message),
-                  const Gap(10),
-                  TelleoTextButton(
-                    text: 'Retry',
-                    onPressed: () {
-                      context
-                          .read<ChatsPageBloc>()
-                          .add(const ChatsPageEvent.retry());
-                    },
-                  ),
-                ],
-              ),
-
-final chats = data.data;
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) => ChatItem(
-                      chat: chats[index],
-                      onTap: () {
-                        AutoRouter.of(context).push(
-                          ChatPageRoute(
-                            bloc: ChatPageBloc(
-                              chat: chats[index],
-                            ),
-                          ),
-                        );
-                      }),
-                  itemCount: chats.length,
-                );
-                */
 
 class ChatItem extends StatelessWidget {
   final ChatEntity chat;
@@ -100,9 +101,8 @@ class ChatItem extends StatelessWidget {
                   contact.email,
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                Text(chat.messages.isNotEmpty
-                    ? chat.messages.first.content
-                    : ''),
+                Text(
+                    chat.messages.isNotEmpty ? chat.messages.last.content : ''),
               ],
             ),
           ],

@@ -8,7 +8,7 @@ part 'home_page_state.dart';
 
 @lazySingleton
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc() : super(const HomePageState.initial()) {
+  HomePageBloc() : super(const HomePageState.chats()) {
     on<_StartedSearching>((event, emit) {
       emit(const HomePageState.search());
     });

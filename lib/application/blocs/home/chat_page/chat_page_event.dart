@@ -5,4 +5,6 @@ class ChatPageEvent with _$ChatPageEvent {
   const factory ChatPageEvent.sendMessage(
       {required String message,
       required ChatEntity currentChat}) = _SendMessage;
+  const factory ChatPageEvent.updateMessages(KtList<MessageEntity> messages) =
+      _UpdateMessages;
 }
