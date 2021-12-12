@@ -1,11 +1,10 @@
-import '../core/base/entity.dart';
-import '../user/user_entity.dart';
+import 'package:telleo/domain/core/base/entity.dart';
 
 class MessageEntity extends Entity {
   final String sender;
   final String content;
 
-  MessageEntity({
+  const MessageEntity({
     required this.sender,
     required this.content,
   });

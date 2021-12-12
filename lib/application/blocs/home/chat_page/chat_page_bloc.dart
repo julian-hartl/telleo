@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:kt_dart/collection.dart';
+import 'package:telleo/domain/chats/chats_repository.dart';
 import '../../app/user/loader/user_bloc.dart';
 import '../../failures/chat_failure_bloc.dart';
 
@@ -15,8 +16,9 @@ part 'chat_page_state.dart';
 
 class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
   final ChatEntity chat;
+  final ChatsRepository chatsRepository;
   List<MessageEntity> _currentMessages = [];
-  ChatPageBloc(this.chat)
+  ChatPageBloc(this.chat, this.chatsRepository)
       : super(
           const ChatPageState.initial(),
         ) {
@@ -25,10 +27,13 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
         final currentUser = await app.get<UserBloc>().getCurrentUser();
         final message =
             MessageEntity(sender: currentUser.uid, content: event.message);
+        chatsRepository.sendMessage(chat, message.content);
+
         app.get<ChatActorBloc>().add(
               ChatActorEvent.addMessage(
-                chat: event.currentChat,
-                message: message,
+                chatId: event.currentChat.id,
+                message: event.message,
+                sender: currentUser.uid,
               ),
             );
         add(_UpdateMessages([..._currentMessages, message].toImmutableList()));
@@ -44,5 +49,19 @@ class ChatPageBloc extends Bloc<ChatPageEvent, ChatPageState> {
       emit(ChatPageState.loadingSuccess(event.messages));
     });
     add(ChatPageEvent.updateMessages(chat.messages.toImmutableList()));
+    app
+        .get<ChatsRepository>()
+        .onMessageReceived(chatId: chat.id)
+        .listen((packet) {
+      add(
+        _UpdateMessages(
+          [
+            ..._currentMessages,
+            MessageEntity(
+                sender: packet.message.sender, content: packet.message.content)
+          ].toImmutableList(),
+        ),
+      );
+    });
   }
 }

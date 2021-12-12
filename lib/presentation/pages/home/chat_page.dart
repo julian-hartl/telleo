@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
+import 'package:telleo/domain/chats/chats_repository.dart';
 import '../../../application/blocs/app/user/loader/user_bloc.dart';
 import '../../../application/blocs/failures/chat_failure_bloc.dart';
 import '../../utils/show_snackbar.dart';
@@ -33,7 +34,7 @@ class ChatPage extends HookWidget {
   Widget build(BuildContext context) {
     final TextEditingController messageController = useTextEditingController();
     return BlocProvider(
-      create: (context) => ChatPageBloc(chat),
+      create: (context) => ChatPageBloc(chat, app.get<ChatsRepository>()),
       child: BlocBuilder<ChatPageBloc, ChatPageState>(
         builder: (context, state) {
           return Scaffold(

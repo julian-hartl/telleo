@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import '../../domain/chats/message_entity.dart';
+import 'package:telleo/domain/chats/message_entity.dart';
 
 part 'message_model.g.dart';
 
@@ -16,9 +16,9 @@ class MessageModel {
       messages.map((e) => e.toEntity()).toList();
 
   static List<MessageModel> fromEntityList(List<MessageEntity> messages) =>
-      messages.map((message) => fromEntity(message)).toList();
+      messages.map((message) => MessageModel.fromEntity(message)).toList();
 
-  static MessageModel fromEntity(MessageEntity entity) =>
+  factory MessageModel.fromEntity(MessageEntity entity) =>
       MessageModel(content: entity.content, sender: entity.sender);
 
   MessageEntity toEntity() => MessageEntity(sender: sender, content: content);
