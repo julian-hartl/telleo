@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import '../../application/blocs/app/user/loader/user_bloc.dart';
@@ -30,16 +31,16 @@ class TelleoSocketService implements SocketService {
   bool isConnected = false;
   bool isConnecting = false;
 
-  Completer<void> _completer = Completer();
+  Completer<void> _connectionCompleter = Completer();
 
   @override
   Future<void> connect() async {
     if (isConnected) return;
     if (isConnecting) {
-      return await _completer.future;
+      return await _connectionCompleter.future;
     }
-    final uid = (await userBloc.getCurrentUser()).uid;
     isConnecting = true;
+    final uid = (await userBloc.getCurrentUser()).uid;
     try {
       socket = io(
         Config.backendUrl,
@@ -60,21 +61,21 @@ class TelleoSocketService implements SocketService {
       socket.onConnect((data) {
         app.get<ILogger>().logInfo('Connected socket!');
         isConnected = true;
-        if (!_completer.isCompleted) {
-          _completer.complete();
+        if (!_connectionCompleter.isCompleted) {
+          _connectionCompleter.complete();
         }
       });
       socket.onDisconnect((_) {
         isConnected = false;
-        _completer = Completer();
+        _connectionCompleter = Completer();
       });
       socket.onError((data) {
         app.get<ILogger>().logError(data);
       });
-      return await _completer.future;
+      return await _connectionCompleter.future;
     } catch (e) {
       isConnecting = false;
-      _completer.completeError(e);
+      _connectionCompleter.completeError(e);
     }
   }
 
@@ -95,9 +96,7 @@ class TelleoSocketService implements SocketService {
   @override
   Future<UnregisterEventListener> registerEventListener(
       String event, EventHandler handler) async {
-    if (!isConnected && !isConnecting) {
-      await connect();
-    }
+    await _connectionCompleter.future;
     final listener = EventListener(event: event, handler: handler);
     _listeners.add(listener);
     if (!_registeredEvents.contains(event)) {
@@ -115,11 +114,14 @@ class TelleoSocketService implements SocketService {
   }
 }
 
-class EventListener {
+class EventListener extends Equatable {
   final String event;
   final EventHandler handler;
-  EventListener({
+  const EventListener({
     required this.event,
     required this.handler,
   });
+
+  @override
+  List<Object?> get props => [event, handler];
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:telleo/domain/chats/chats_event_handler.dart';
@@ -67,16 +69,28 @@ class TelleoChatsRepository implements ChatsRepository {
   }
 
   @override
-  Stream<MessagePacket> onMessageReceived({String? chatId}) async* {
-    yield* chatsEventHandler.onMessageReceived();
+  Stream<MessagePacket> onMessageReceived({String? chatId}) {
+    return chatsEventHandler.onMessageReceived().where((packet) {
+      if (chatId != null) {
+        return packet.chatId == chatId;
+      }
+      return true;
+    }).asBroadcastStream();
   }
 
   @override
-  Future<Either<ChatsFailure, Unit>> sendMessage(
-      ChatEntity chat, String content) async {
+  Future<Either<ChatsFailure, Unit>> sendMessage({
+    required String chatId,
+    required List<String> to,
+    required String content,
+  }) async {
     final currentUser = await userBloc.getCurrentUser();
     chatsEventHandler.sendMessage(
-        chat: chat, content: content, currentUser: currentUser);
+      chatId: chatId,
+      to: to,
+      content: content,
+      currentUser: currentUser,
+    );
     return right(unit);
   }
 }

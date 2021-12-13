@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:telleo/domain/chats/chats_repository.dart';
+
 import '../../../application/blocs/app/user/loader/user_bloc.dart';
 import '../../../application/blocs/failures/chat_failure_bloc.dart';
 import '../../utils/show_snackbar.dart';
@@ -33,9 +34,21 @@ class ChatPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController messageController = useTextEditingController();
+    final ScrollController messageViewController = useScrollController();
+
     return BlocProvider(
       create: (context) => ChatPageBloc(chat, app.get<ChatsRepository>()),
-      child: BlocBuilder<ChatPageBloc, ChatPageState>(
+      child: BlocConsumer<ChatPageBloc, ChatPageState>(
+        listener: (context, state) {
+          state.maybeWhen(
+              orElse: () {},
+              loadingSuccess: (_) {
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  messageViewController
+                      .jumpTo(messageViewController.position.maxScrollExtent);
+                });
+              });
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -72,6 +85,7 @@ class ChatPage extends HookWidget {
                     children: [
                       Expanded(
                         child: ListView.builder(
+                          controller: messageViewController,
                           itemBuilder: (context, index) {
                             final message = messages[index];
 

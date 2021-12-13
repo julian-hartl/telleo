@@ -1,5 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:telleo/presentation/pages/home/edit_profile_page.dart';
+import 'package:telleo/presentation/routing/router.dart';
 
 import '../../../application/blocs/app/chat/loader/chat_bloc.dart';
 import '../../../application/blocs/app/user/loader/user_bloc.dart';
@@ -83,7 +86,7 @@ class HomePageBody extends StatelessWidget {
             onPressed: () {
               context
                   .read<HomePageBloc>()
-                  .add(const HomePageEvent.stopSearching());
+                  .add(const HomePageEvent.stoppedSearching());
             },
             icon: const Icon(Icons.arrow_back_ios),
           ),
@@ -95,7 +98,7 @@ class HomePageBody extends StatelessWidget {
                 onEditingComplete: () {
                   context
                       .read<HomePageBloc>()
-                      .add(const HomePageEvent.stopSearching());
+                      .add(const HomePageEvent.stoppedSearching());
                 },
                 autofocus: true,
                 textAlignVertical: TextAlignVertical.bottom,
@@ -130,25 +133,28 @@ class HomePageBody extends StatelessWidget {
         BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
             return Padding(
-                padding: pagePadding,
-                child: state.map(
-                  initial: (_) => Container(),
-                  loadInProgress: (_) => const CircularProgressIndicator(),
-                  loadingSuccess: (success) => InkWell(
-                    customBorder: const CircleBorder(),
-                    onTap: () {},
-                    child: CircleAvatar(
-                      radius: profilePictureRadius,
-                      foregroundImage:
-                          NetworkImage(success.user.profilePictureUrl),
-                      child: const CircularProgressIndicator(),
-                    ),
-                  ),
-                  loadingFailure: (failure) => const CircleAvatar(
+              padding: pagePadding,
+              child: state.map(
+                initial: (_) => Container(),
+                loadInProgress: (_) => const CircularProgressIndicator(),
+                loadingSuccess: (success) => InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: () {
+                    AutoRouter.of(context).push(const EditProfilePageRoute());
+                  },
+                  child: CircleAvatar(
                     radius: profilePictureRadius,
-                    child: Text('!'),
+                    foregroundImage:
+                        NetworkImage(success.user.profilePictureUrl),
+                    child: const CircularProgressIndicator(),
                   ),
-                ));
+                ),
+                loadingFailure: (failure) => const CircleAvatar(
+                  radius: profilePictureRadius,
+                  child: Text('!'),
+                ),
+              ),
+            );
           },
         ),
       ],

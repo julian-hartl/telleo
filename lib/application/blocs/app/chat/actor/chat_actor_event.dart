@@ -6,7 +6,7 @@ class ChatActorEvent with _$ChatActorEvent {
     ChatEntity chat,
   ) = _UpdateChat;
   const factory ChatActorEvent.addChat(
-    String withId,
+    ChatEntity chat,
   ) = _AddChat;
   const factory ChatActorEvent.addMessage({
     required String message,

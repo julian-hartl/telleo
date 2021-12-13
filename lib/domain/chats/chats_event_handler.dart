@@ -7,7 +7,8 @@ abstract class ChatsEventHandler {
   Stream<MessagePacket> onMessageReceived();
   void dispose();
   void sendMessage({
-    required ChatEntity chat,
+    required String chatId,
+    required List<String> to,
     required String content,
     required UserEntity currentUser,
   });

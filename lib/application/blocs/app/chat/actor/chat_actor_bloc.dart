@@ -3,30 +3,32 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import '../loader/chat_bloc.dart';
-import '../../user/loader/user_bloc.dart';
-import '../../../failures/chat_failure_bloc.dart';
-import '../../../../../data/event_handlers/chat_event_handler.dart';
-import '../../../../../data/models/message_model.dart';
+import 'package:kt_dart/collection.dart';
+
 import '../../../../../domain/chats/chat_entity.dart';
 import '../../../../../domain/chats/chats_repository.dart';
 import '../../../../../domain/chats/message_entity.dart';
 import '../../../../../domain/core/services/logger.dart';
-import 'package:kt_dart/collection.dart';
+import '../../../failures/chat_failure_bloc.dart';
+import '../../user/loader/user_bloc.dart';
+import '../loader/chat_bloc.dart';
 
+part 'chat_actor_bloc.freezed.dart';
 part 'chat_actor_event.dart';
 part 'chat_actor_state.dart';
-part 'chat_actor_bloc.freezed.dart';
 
-@lazySingleton
+/*
+* Note that this blocs only task is to perform mutations on the currently in memory stored chats (not to save data to any kind of database)
+ */
+@singleton
 class ChatActorBloc extends Bloc<ChatActorEvent, ChatActorState> {
-  final ILogger log;
+  final ILogger logger;
   final ChatBloc chatBloc;
   final UserBloc userBloc;
   final ChatsRepository chatsRepository;
   final ChatFailureBloc chatFailureBloc;
 
-  ChatActorBloc(this.log, this.chatBloc, this.userBloc, this.chatsRepository,
+  ChatActorBloc(this.logger, this.chatBloc, this.userBloc, this.chatsRepository,
       this.chatFailureBloc)
       : super(const ChatActorState.initial()) {
     on<_AddMessage>((event, emit) async {
@@ -41,6 +43,7 @@ class ChatActorBloc extends Bloc<ChatActorEvent, ChatActorState> {
         return chatFailureBloc
             .add(const ChatFailureEvent.couldNotSendMessage());
       }
+
       add(
         _UpdateChat(
           chat.copyWith(
@@ -52,7 +55,12 @@ class ChatActorBloc extends Bloc<ChatActorEvent, ChatActorState> {
         ),
       );
     });
-    on<_AddChat>((event, emit) {});
+    on<_AddChat>((event, emit) async {
+      final chat = event.chat;
+      final currentChats = (await chatBloc.getChats()).toMutableList().asList();
+      chatBloc.add(
+          ChatEvent.updateChats([...currentChats, chat].toImmutableList()));
+    });
     on<_UpdateChat>((event, emit) async {
       final chatToUpdate = event.chat;
       final currentChats = (await chatBloc.getChats()).toMutableList().asList();
@@ -65,11 +73,22 @@ class ChatActorBloc extends Bloc<ChatActorEvent, ChatActorState> {
       }).toImmutableList();
       chatBloc.add(ChatEvent.updateChats(updatedChats));
     });
-    chatsRepository.onMessageReceived().listen((packet) {
-      add(ChatActorEvent.addMessage(
+    _messageReceivedSub = chatsRepository.onMessageReceived().listen((packet) {
+      add(
+        ChatActorEvent.addMessage(
           message: packet.message.content,
           chatId: packet.chatId,
-          sender: packet.message.sender));
+          sender: packet.message.sender,
+        ),
+      );
     });
+  }
+
+  late final StreamSubscription _messageReceivedSub;
+
+  @override
+  Future<void> close() async {
+    await _messageReceivedSub.cancel();
+    return super.close();
   }
 }
