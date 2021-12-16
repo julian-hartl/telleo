@@ -86,4 +86,20 @@ class TelleoUserRepository implements UserRepository {
       return await getAllUsers();
     }
   }
+
+  @override
+  Future<Either<UserFailure, UserEntity>> updateUser(UserEntity user) async {
+    final result = await apiService.update(
+        path: '${Config.apiPath}/users/update',
+        data: {'uid': user.uid, 'name': user.name});
+    return result.fold((failure) {
+      return left(
+        failure.maybeWhen(
+          orElse: () => const UserFailure.serverError(),
+          noConnection: () => const UserFailure.noConnection(),
+          internalServerError: () => const UserFailure.serverError(),
+        ),
+      );
+    }, (json) => right(UserModel.fromJson(json['user']).toEntity()));
+  }
 }

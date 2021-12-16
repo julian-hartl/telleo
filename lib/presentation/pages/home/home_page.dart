@@ -140,7 +140,8 @@ class HomePageBody extends StatelessWidget {
                 loadingSuccess: (success) => InkWell(
                   customBorder: const CircleBorder(),
                   onTap: () {
-                    AutoRouter.of(context).push(const EditProfilePageRoute());
+                    AutoRouter.of(context)
+                        .push(EditProfilePageRoute(user: success.user));
                   },
                   child: CircleAvatar(
                     radius: profilePictureRadius,

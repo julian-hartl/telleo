@@ -1,6 +1,8 @@
-import '../core/base/entity.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class SettingsEntity extends Entity {
-  @override
-  List<Object?> get props => [];
+part 'settings_entity.freezed.dart';
+
+@freezed
+class SettingsEntity with _$SettingsEntity {
+  const factory SettingsEntity() = _SettingsEntity;
 }

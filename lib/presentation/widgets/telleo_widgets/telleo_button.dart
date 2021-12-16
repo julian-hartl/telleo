@@ -6,7 +6,7 @@ class TelleoButton extends StatelessWidget {
   const TelleoButton(
       {required this.child,
       required this.onPressed,
-      required this.background,
+      this.background,
       this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       this.flex = false,
       Key? key})
@@ -14,7 +14,7 @@ class TelleoButton extends StatelessWidget {
 
   final Widget child;
   final VoidCallback onPressed;
-  final Color background;
+  final Color? background;
   final EdgeInsets padding;
   final bool flex;
 
@@ -24,7 +24,7 @@ class TelleoButton extends StatelessWidget {
       flex: flex,
       borderRadius: 15.0,
       child: child,
-      color: background,
+      color: background ?? Theme.of(context).primaryColor,
       onTap: onPressed,
       padding: padding,
     );

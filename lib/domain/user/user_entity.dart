@@ -1,19 +1,17 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../core/base/entity.dart';
 
 export '../core/value_objects.dart';
 
-class UserEntity extends Entity {
-  final String name;
-  final String uid;
-  final String email;
-  final String profilePictureUrl;
-  const UserEntity({
-    required this.name,
-    required this.uid,
-    required this.email,
-    required this.profilePictureUrl,
-  });
+part 'user_entity.freezed.dart';
 
-  @override
-  List<Object?> get props => [name, uid, email];
+@freezed
+class UserEntity with _$UserEntity {
+  const factory UserEntity({
+    required String name,
+    required String uid,
+    required String email,
+    required String profilePictureUrl,
+  }) = _UserEntity;
 }

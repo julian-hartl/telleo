@@ -1,14 +1,11 @@
-import 'package:telleo/domain/core/base/entity.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class MessageEntity extends Entity {
-  final String sender;
-  final String content;
+part 'message_entity.freezed.dart';
 
-  const MessageEntity({
-    required this.sender,
-    required this.content,
-  });
-
-  @override
-  List<Object?> get props => [sender, content];
+@freezed
+class MessageEntity with _$MessageEntity {
+  const factory MessageEntity({
+    required String sender,
+    required String content,
+  }) = _MessageEntity;
 }

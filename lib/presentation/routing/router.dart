@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:telleo/domain/user/user_entity.dart';
 import 'package:telleo/presentation/pages/home/edit_profile_page.dart';
 
 import '../../domain/chats/chat_entity.dart';
