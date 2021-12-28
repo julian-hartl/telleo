@@ -37,6 +37,9 @@ class EditProfilePageBloc
     on<_UsernameChanged>(
         (event, emit) => emit(state.copyWith(username: Name(event.username))));
     on<_Save>((event, emit) async {
+      if (state.isUpdating) {
+        return;
+      }
       final isEmailValid = state.emailAdress.isValid();
       final isUsernameValid = state.username.isValid();
       if (!isEmailValid || !isUsernameValid) {
@@ -67,5 +70,11 @@ class EditProfilePageBloc
         });
       }
     });
+  }
+
+  @override
+  Future<void> close() {
+    print('Test');
+    return super.close();
   }
 }

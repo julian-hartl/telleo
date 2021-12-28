@@ -33,10 +33,11 @@ class SearchUsersPage extends StatelessWidget {
                     )
                   : Center(
                       child: Text(
-                        'No users found.',
+                        success.query.isNotEmpty
+                            ? 'No users found.'
+                            : 'Type something to search!',
                         style: Theme.of(context).textTheme.bodyText2?.copyWith(
                               fontSize: 22,
-                              fontWeight: FontWeight.bold,
                             ),
                       ),
                     );

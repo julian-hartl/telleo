@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 import 'package:telleo/domain/core/services/logger.dart';
-import '../models/message_packet_model.dart';
+
 import '../../domain/chats/chat_entity.dart';
 import '../../domain/chats/chats_event_handler.dart';
 import '../../domain/chats/message_entity.dart';
@@ -10,6 +10,7 @@ import '../../domain/chats/message_packet.dart';
 import '../../domain/user/user_entity.dart';
 
 import '../../domain/core/services/socket_service/socket_service.dart';
+import 'message_packet_model.dart';
 
 @LazySingleton(as: ChatsEventHandler)
 class TelleoChatsEventHandler implements ChatsEventHandler {

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:telleo/config.dart';
-import 'package:telleo/data/services/telleo_api_service.dart';
+import 'package:telleo/data/core/telleo_api_service.dart';
 import 'package:telleo/domain/core/gateways/api_gateway.dart';
 import 'package:telleo/domain/core/services/api_service/api_service.dart';
 import 'package:telleo/domain/core/services/logger.dart';

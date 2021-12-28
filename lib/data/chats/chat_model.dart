@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kt_dart/kt.dart';
 import '../../application/blocs/app/user/loader/user_bloc.dart';
-import 'user_model.dart';
+import '../users/user_model.dart';
 import '../../domain/chats/chat_entity.dart';
 import '../../domain/user/user_entity.dart';
 import '../../utils/dependencies.dart';

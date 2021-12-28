@@ -19,17 +19,12 @@ class EditProfilePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => app.get<EditProfilePageBloc>()
-        ..add(
-          EditProfilePageEvent.initialize(
-            email: user.email,
-            username: user.name,
-            profilePictureUrl: user.profilePictureUrl,
-          ),
-        ),
-      child: _EditProfilePageContent(user: user),
-    );
+    app.get<EditProfilePageBloc>().add(EditProfilePageEvent.initialize(
+          email: user.email,
+          username: user.name,
+          profilePictureUrl: user.profilePictureUrl,
+        ));
+    return _EditProfilePageContent(user: user);
   }
 }
 
@@ -67,20 +62,28 @@ class _EditProfilePageContent extends HookWidget {
             automaticallyImplyLeading: false,
             leading: Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: IconButton(
-                onPressed: () {
-                  AutoRouter.of(context).pop();
-                  context
-                      .read<EditProfilePageBloc>()
-                      .add(const EditProfilePageEvent.save());
+              child: BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
+                builder: (context, state) {
+                  return IconButton(
+                    onPressed: () {
+                      if (state.isUpdating) {
+                        return;
+                      }
+                      AutoRouter.of(context).pop();
+                    },
+                    icon: const Icon(Icons.arrow_back_ios),
+                  );
                 },
-                icon: const Icon(Icons.arrow_back_ios),
               ),
             ),
             actions: [
               TelleoButton(
                 child: const Icon(Icons.done),
-                onPressed: () {},
+                onPressed: () {
+                  context
+                      .read<EditProfilePageBloc>()
+                      .add(const EditProfilePageEvent.save());
+                },
                 background: theme.backgroundColor,
               )
             ],
@@ -119,6 +122,11 @@ class _EditProfilePageForm extends StatelessWidget {
     return ThemeProvider(builder: (context, theme) {
       return BlocBuilder<EditProfilePageBloc, EditProfilePageState>(
         builder: (context, state) {
+          if (state.isUpdating) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

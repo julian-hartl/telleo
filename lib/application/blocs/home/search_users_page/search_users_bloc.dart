@@ -42,10 +42,11 @@ class SearchUsersBloc extends Bloc<SearchUsersEvent, SearchUsersState> {
         }, (users) async {
           emit(SearchUsersState.loadingSuccessful(
               (await _markAlreadyExistingChats(await _removeCurrentUser(users)))
-                  .toImmutableList()));
+                  .toImmutableList(),
+              query));
         });
       } else {
-        emit(const SearchUsersState.loadingSuccessful(KtList.empty()));
+        emit(SearchUsersState.loadingSuccessful(const KtList.empty(), query));
       }
     });
   }

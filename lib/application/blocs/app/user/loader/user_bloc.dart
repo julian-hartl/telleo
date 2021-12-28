@@ -49,6 +49,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(this.userRepository, this.log) : super(const UserState.initial()) {
     on<_UpdateUser>((event, emit) async {
       final user = event.user;
+      log.logInfo('Updated User: $user');
       emit(UserState.loadingSuccess(user));
     });
 

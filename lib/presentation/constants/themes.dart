@@ -12,15 +12,16 @@ class _TextStyles {
 
 final darkTheme = ThemeData.from(
   colorScheme: const ColorScheme.dark(
-    background: backgroundColor,
-    onBackground: onBackground,
-    surface: darkerBackgroundColor,
-    primary: accentColor,
-    secondary: secondaryAccentColor,
-    onPrimary: onAccent,
-    onSecondary: onSecondary,
-    primaryVariant: darkerAccentColor,
-  ),
+      background: backgroundColor,
+      onBackground: onBackground,
+      surface: darkerBackgroundColor,
+      primary: accentColor,
+      secondary: secondaryAccentColor,
+      onPrimary: onAccent,
+      onSecondary: onSecondary,
+      primaryVariant: darkerAccentColor,
+      error: Colors.red,
+      onError: Colors.white),
   textTheme: const TextTheme(
     bodyText2: TextStyle(
       fontSize: 15.0,

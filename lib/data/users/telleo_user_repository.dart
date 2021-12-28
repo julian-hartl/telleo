@@ -9,7 +9,7 @@ import '../../domain/user/user_entity.dart';
 import '../../domain/user/user_failures.dart';
 import '../../domain/user/user_repository.dart';
 import '../../utils/dependencies.dart';
-import '../models/user_model.dart';
+import 'user_model.dart';
 
 @LazySingleton(as: UserRepository)
 class TelleoUserRepository implements UserRepository {

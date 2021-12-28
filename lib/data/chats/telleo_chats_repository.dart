@@ -12,7 +12,8 @@ import '../../domain/chats/chat_entity.dart';
 import '../../domain/chats/chats_failures.dart';
 import '../../domain/chats/chats_repository.dart';
 import '../../domain/core/services/api_service/api_service.dart';
-import '../models/chat_model.dart';
+
+import 'chat_model.dart';
 
 @LazySingleton(as: ChatsRepository)
 class TelleoChatsRepository implements ChatsRepository {

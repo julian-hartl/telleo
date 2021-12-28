@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:telleo/application/blocs/home/home_page/home_page_bloc.dart';
+import 'package:telleo/application/blocs/home/search_users_page/search_users_bloc.dart';
 import '../../../application/blocs/app/chat/loader/chat_bloc.dart';
 
 import '../../../application/blocs/home/chat_page/chat_page_bloc.dart';
@@ -29,6 +31,35 @@ class ChatsPage extends StatelessWidget {
           ),
           loadingSuccess: (success) {
             final chats = success.chats;
+            if (chats.isEmpty()) {
+              return Center(
+                child: Padding(
+                  padding: pagePadding,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'You haven\'t added any friends yet...',
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                              fontSize: 21,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const Gap(10),
+                      TelleoTextButton(
+                        text: 'Add some friends!',
+                        onPressed: () {
+                          context
+                              .read<HomePageBloc>()
+                              .add(const HomePageEvent.startedSearching());
+                        },
+                        flex: false,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return ListView.builder(
               shrinkWrap: true,
               itemBuilder: (context, index) => ChatItem(

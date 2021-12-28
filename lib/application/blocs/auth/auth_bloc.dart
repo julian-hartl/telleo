@@ -50,6 +50,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         } else {
           emit(const AuthState.unauthenticated());
         }
+      } else {
+        emit(const AuthState.unauthenticated());
       }
     } else {
       emit(const AuthState.unauthenticated());

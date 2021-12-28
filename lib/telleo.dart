@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:telleo/application/blocs/home/edit_profile_page/edit_profile_page_bloc.dart';
 import 'application/blocs/failures/chat_failure_bloc.dart';
 
 import 'application/blocs/app/chat/actor/chat_actor_bloc.dart';
@@ -44,6 +45,9 @@ class Telleo extends StatelessWidget {
         BlocProvider(
           create: (context) => app.get<ChatFailureBloc>(),
         ),
+        BlocProvider(
+          create: (context) => app.get<EditProfilePageBloc>(),
+        )
       ],
       child: MaterialApp.router(
         title: 'Flutter Demo',

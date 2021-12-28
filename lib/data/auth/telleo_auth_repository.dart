@@ -10,7 +10,7 @@ import '../../domain/core/services/token_service/token_service.dart';
 import '../../domain/core/value_objects.dart';
 import '../../domain/user/user_entity.dart';
 import '../../utils/dependencies.dart';
-import '../models/user_model.dart';
+import '../users/user_model.dart';
 
 @LazySingleton(as: AuthRepository)
 class TelleoAuthRepository implements AuthRepository {
