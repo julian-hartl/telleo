@@ -26,6 +26,7 @@ class RoundedButton extends StatelessWidget {
         onTap: onTap,
         child: flex
             ? Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(child: _buildBody(borderRadius)),
                 ],
