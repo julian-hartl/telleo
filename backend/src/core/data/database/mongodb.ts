@@ -1,9 +1,8 @@
-import _ from "lodash";
 import mongoose from "mongoose";
-import { Either, right, left, unit, Unit } from "funpjs";
+import {Either, left, right, unit, Unit} from "funpjs";
 
 import Database from "../../domain/database/database";
-import { DatabaseConnectionFailure } from "../../domain/database/database_failures";
+import {DatabaseConnectionFailure} from "../../domain/database/database_failures";
 
 import log from "../logging/log";
 

@@ -8,15 +8,15 @@ export default function setUpConfig() {
   log.info("Configuring enviroment for " + NODE_ENV);
   if (NODE_ENV === Enviroments.dev) {
     dotenv.config({
-      path: path.join(__dirname, "./../.env.test"),
+      path: path.join(__dirname, "./../.env"),
     });
   } else if (NODE_ENV === Enviroments.prod) {
-    const envPath = path.join(__dirname, "./../.env.test.production");
+    const envPath = path.join(__dirname, "./../.env.production");
     dotenv.config({
       path: envPath,
     });
   } else if (NODE_ENV === Enviroments.test) {
-    const envPath = path.join(__dirname, "./../.env.test.test");
+    const envPath = path.join(__dirname, "./../.env.test");
     dotenv.config({
       path: envPath,
     });
