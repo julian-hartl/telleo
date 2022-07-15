@@ -10,6 +10,7 @@ lerna-debug.log*
 socketio-client/
 build/
 .vscode/
+.idea/
 **/playground.ts
 dependency_graph/
 # Diagnostic reports (https://nodejs.org/api/report.html)
@@ -76,7 +77,7 @@ web_modules/
 
 # dotenv environment variables file
 .env
-.env
+.env.test
 .env.production
 
 # parcel-bundler cache (https://parceljs.org/)
